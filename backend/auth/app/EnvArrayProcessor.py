@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 
+
 class EnvArrayProcessor:
     def __init__(self, env_file: str):
         # Загружаем .env файл
@@ -11,11 +12,13 @@ class EnvArrayProcessor:
     def _parse_env_array(self, env_value: str):
         """
         Преобразует строку из .env файла в список URL.
-        Строка может быть представлена в формате: ["http://localhost:3000", "http://localhost:8084", ...]
+        Строка может быть представлена в формате:
+        ["http://localhost:3000", "http://localhost:8084", ...]
         """
         if not env_value:
             return []
-        # Убираем лишние символы и разделяем строки по запятым
+        # Убираем лишние символы и
+        # разделяем строки по запятым
         return [url.strip().strip('"') for url in env_value.strip("[]").split(",")]
 
     def get_unique_urls(self):

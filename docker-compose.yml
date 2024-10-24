@@ -16,10 +16,10 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: /auth/Dockerfile
     container_name: backend
     env_file:
-      - ./backend/.env
+      - backend/auth/.env
     ports:
       - "8000:8000"
     depends_on:
