@@ -1,6 +1,9 @@
 import os
 from dotenv import load_dotenv
 
+__all__=[
+    "EnvArrayProcessor"
+]
 
 class EnvArrayProcessor:
     def __init__(self, env_file: str):

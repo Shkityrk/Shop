@@ -1,5 +1,5 @@
 services:
-  db:
+  database-postgres:
     image: postgres:14
     container_name: db
     environment:
@@ -11,9 +11,9 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - app-network
+      - shop-network
 
-  backend:
+  backend-authentication:
     build:
       context: ./backend
       dockerfile: /auth/Dockerfile
@@ -23,9 +23,10 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - database-postgres
+    restart: on-failure
     networks:
-      - app-network
+      - shop-network
 
   frontend:
     build:
@@ -37,9 +38,9 @@ services:
     ports:
       - "3000:3000"  # Внутренний порт приложения
     depends_on:
-      - backend
+      - backend-authentication
     networks:
-      - app-network
+      - shop-network
 
 
   nginx:
@@ -50,13 +51,14 @@ services:
       - "8004:80"
     depends_on:
       - frontend
-      - backend
+      - backend-authentication
+      - database-postgres
     networks:
-      - app-network
+      - shop-network
 
 volumes:
   db_data:
 
 networks:
-  app-network:
+  shop-network:
     driver: bridge

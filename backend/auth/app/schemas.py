@@ -1,6 +1,14 @@
 from pydantic import BaseModel, EmailStr
 
 
+__all__=[
+    "UserLogin",
+    "UserBase",
+    "UserOut",
+    "UserCreate"
+]
+
+
 class UserBase(BaseModel):
     first_name: str
     last_name: str

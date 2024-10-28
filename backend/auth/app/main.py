@@ -47,13 +47,8 @@ def register(
     user_create: schemas.UserCreate, response: Response, db: Session = Depends(get_db)
 ):
     user = (
-        db.query(models.User)
-        .filter(
-            models.User.username
-            == user_create.username | models.User.email
-            == user_create.email
-        )
-        .first()
+        db.query(models.User).filter(models.User.username == user_create.username or
+                                     models.User.email == user_create.email).first()
     )
     if user:
         raise HTTPException(

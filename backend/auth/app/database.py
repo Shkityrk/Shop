@@ -3,6 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
+__all__=[
+    "Base",
+]
+
 
 # Получаем переменные окружения
 DATABASE_HOST = os.getenv("DATABASE_HOST", "db")
