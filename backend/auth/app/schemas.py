@@ -1,22 +1,32 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
-class UserCreate(BaseModel):
+
+__all__=[
+    "UserLogin",
+    "UserBase",
+    "UserOut",
+    "UserCreate"
+]
+
+
+class UserBase(BaseModel):
+    first_name: str
+    last_name: str
     username: str
-    email: str
+    email: EmailStr
+
+
+class UserCreate(UserBase):
     password: str
-    first_name: str
-    last_name: str
 
-class UserResponse(BaseModel):
-    id: int
+
+class UserLogin(BaseModel):
     username: str
-    email: str
-    first_name: str
-    last_name: str
-    role: str
+    password: str
+
+
+class UserOut(UserBase):
+    id: int
 
     class Config:
         orm_mode = True
-
-class TokenData(BaseModel):
-    username: str = None
