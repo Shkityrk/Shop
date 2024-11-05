@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8001
 
-CMD ["sh", "-c", "python -m alembic revision --autogenerate -m 'Create initial migrations' && alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8001"]
+CMD ["sh", "-c", "python -m uvicorn main:app --host 0.0.0.0 --port 8001"]
