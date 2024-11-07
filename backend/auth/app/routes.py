@@ -76,7 +76,9 @@ def login(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
     response.set_cookie(
-        key="access_token", value=f"Bearer {access_token}", httponly=False
+        key="access_token",
+        value=f"Bearer {access_token}",
+        httponly=False
     )
     return {"message": "Успешный вход"}
 
@@ -103,3 +105,8 @@ async def check_jwt_token(request: Request, call_next):
         pass
     response = await call_next(request)
     return response
+
+
+@auth_router.get("/verify-token", response_model=schemas.UserOut)
+def verify_token(current_user: models.User = Depends(get_current_user)):
+    return current_user
