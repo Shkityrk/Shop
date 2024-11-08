@@ -77,9 +77,16 @@ def login(
     )
     response.set_cookie(
         key="access_token",
-        value=f"Bearer {access_token}",
-        httponly=False
+        value=f"Bearer {access_token}",  # ваш токен
+        httponly=True,
     )
+    response.set_cookie(
+        key="access_token",
+        value=f"Bearer {access_token}",  # ваш токен
+        httponly=True,
+        domain="localhost",
+            )
+
     return {"message": "Успешный вход"}
 
 # Выход
