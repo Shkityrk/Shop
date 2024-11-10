@@ -1,0 +1,8 @@
+#dirs
+.idea/
+.venv
+
+
+#files
+*.env
+*.hosts
