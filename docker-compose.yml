@@ -12,6 +12,7 @@ services:
     networks:
       - app_network
 
+
   admin:
     build: ./backend/admin
     ports:
