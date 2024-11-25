@@ -59,3 +59,20 @@ def update_product(name: str, product: ProductCreate, db: Session = Depends(get_
     db.commit()
     db.refresh(db_product)
     return db_product
+
+
+@router.get("/verify-product/{product_id}")
+def verify_product(product_id: int, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    if product:
+        return {"exists": True}
+    else:
+        return {"exists": False}
+
+@router.get("/info/{name}")
+def info_product(name: str, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.name == name).first()
+    if product:
+        return {"product": product}
+    else:
+        raise HTTPException(status_code=404, detail="Product not found")
