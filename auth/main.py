@@ -9,7 +9,7 @@ from app.routes import auth_router
 # Создаем таблицы
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(root_path="/auth")
+app = FastAPI()
 
 # Инициализируем список разрешенных источников
 processor = EnvArrayProcessor("../.hosts")
@@ -27,8 +27,3 @@ app.add_middleware(
 
 # Подключаем маршруты
 app.include_router(auth_router)
-
-# Путь для проверки здоровья сервиса
-@app.get("/api/health")
-def read_health():
-    return {"status": "ok"}

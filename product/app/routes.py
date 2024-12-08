@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from . import models, database
 from .schemas import ProductCreate
 
-router = APIRouter()
+router = APIRouter(prefix="/product")
 
 def get_db():
     db = database.SessionLocal()
@@ -12,13 +12,13 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/list/")
+@router.get("/list")
 def read_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     products = db.query(models.Product).offset(skip).limit(limit).all()
     return products
 
 
-@router.post("/add/")
+@router.post("/add")
 def create_product(product: ProductCreate, db: Session = Depends(get_db)):
     # Проверка на уникальность имени
     existing_product = db.query(models.Product).filter(models.Product.name == product.name).first()

@@ -1,5 +1,5 @@
 # cart/main.py
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, APIRouter
 from sqlalchemy.orm import Session
 from typing import List
 from app import schemas, models
@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+appl = FastAPI()
 
 
 # Настройка CORS (если требуется)
@@ -18,7 +18,7 @@ origins = [
     "http://auth:8002/",  # или другой адрес фронтенда
 ]
 
-app.add_middleware(
+appl.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
@@ -26,8 +26,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app = APIRouter(prefix="/cart")
+appl.include_router(app)
 # Эндпоинт для получения всех товаров в корзине текущего пользователя
-@app.get("/cart/", response_model=List[schemas.CartItem])
+@app.get("/cart", response_model=List[schemas.CartItem])
 def get_cart_items(
     db: Session = Depends(get_db),
     user_data: dict = Depends(get_current_user)
@@ -37,7 +39,7 @@ def get_cart_items(
     return items
 
 
-@app.post("/cart/add/", response_model=schemas.CartItem, status_code=status.HTTP_201_CREATED)
+@app.post("/cart/add", response_model=schemas.CartItem, status_code=status.HTTP_201_CREATED)
 def add_item_to_cart(
     item: schemas.CartItemCreate,
     db: Session = Depends(get_db),
