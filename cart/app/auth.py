@@ -21,7 +21,7 @@ def get_token_from_cookie(request: Request):
 def get_current_user(token: str = Depends(get_token_from_cookie)):
     cookie = {"access_token": f"{token}"}
     try:
-        response = requests.get(f"http://auth:8002/verify-token", cookies=cookie)
+        response = requests.get(f"http://auth:8002/auth/verify-token", cookies=cookie)
         print(response.json())
         if response.status_code != 200:
             raise HTTPException(

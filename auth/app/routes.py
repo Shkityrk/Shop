@@ -13,11 +13,9 @@ from .auth import (
 )
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+auth_router = APIRouter(prefix="/auth")
 
-# Создаем роутер для обработки маршрутов
-auth_router = APIRouter()
-app = FastAPI()
+
 
 # Зависимость для получения сессии базы данных
 def get_db():
@@ -100,18 +98,6 @@ def logout(response: Response):
 def protected_route(current_user: models.User = Depends(get_current_user)):
     return {"message": f"Привет, {current_user.username}!"}
 
-# Middleware для проверки токена из куки
-@app.middleware("http")
-async def check_jwt_token(request: Request, call_next):
-    try:
-        token = request.cookies.get("access_token")
-        if token:
-            scheme, _, param = token.partition(" ")
-            request.headers["Authorization"] = f"{scheme} {param}"
-    except Exception:
-        pass
-    response = await call_next(request)
-    return response
 
 
 @auth_router.get("/verify-token", response_model=schemas.UserOut)
