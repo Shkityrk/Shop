@@ -6,3 +6,8 @@
 #files
 *.env
 *.hosts
+
+__pycache__/
+
+*.crt
+*.key
