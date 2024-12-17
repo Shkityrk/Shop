@@ -6,3 +6,5 @@
 #files
 *.env
 *.hosts
+
+__pycache__/
