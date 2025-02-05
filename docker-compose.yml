@@ -1,16 +1,12 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:13
-    environment:
-      - POSTGRES_DB=admin_db
-      - POSTGRES_USER=admin_user
-      - POSTGRES_PASSWORD=admin_pass
+    env_file:
+      - ./database/config/.env
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
-      - app_network
+      - shop_network
 
   product:
     build: ./product
@@ -19,7 +15,7 @@ services:
     depends_on:
       - db
     networks: 
-      - app_network
+      - shop_network
 
   auth:
     build: ./auth
@@ -30,7 +26,7 @@ services:
     depends_on:
       - db
     networks:
-      - app_network
+      - shop_network
 
   cart:
     build: ./cart
@@ -42,7 +38,7 @@ services:
     env_file:
       - ./cart/.env
     networks:
-      - app_network
+      - shop_network
 
   nginx:
     build:
@@ -56,11 +52,11 @@ services:
       - product
       - auth
     networks:
-      - app_network
+      - shop_network
 
 volumes:
   db_data:
 
 networks:
-  app_network:
+  shop_network:
     driver: bridge
