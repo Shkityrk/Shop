@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import engine
 from app.models import Base
-from app.EnvArrayProcessor import EnvArrayProcessor
 from app.routes import auth_router
 
 # Создаем таблицы

@@ -20,7 +20,7 @@ services:
   auth:
     build: ./auth
     env_file:
-      - ./auth/.env/.env
+      - ./auth/.env
     ports:
       - "8002:8002"
     depends_on:
