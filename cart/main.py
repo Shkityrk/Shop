@@ -1,24 +1,24 @@
 # cart/main.py
-from fastapi import FastAPI, Depends, HTTPException, status, APIRouter
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 from app import schemas, models
 from app.database import engine, Base, get_db
 from app.auth import get_current_user
-from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
-appl = FastAPI()
+app = FastAPI()
 
-
-# Настройка CORS (если требуется)
+# Настройка CORS
 origins = [
     "http://localhost",
-    "http://auth:8002/",  # или другой адрес фронтенда
+    "http://localhost:5173",
+    "http://auth:8002",
 ]
 
-appl.add_middleware(
+app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
@@ -26,8 +26,6 @@ appl.add_middleware(
     allow_headers=["*"],
 )
 
-app = APIRouter(prefix="/cart")
-appl.include_router(app)
 # Эндпоинт для получения всех товаров в корзине текущего пользователя
 @app.get("/cart", response_model=List[schemas.CartItem])
 def get_cart_items(
@@ -38,7 +36,7 @@ def get_cart_items(
     items = db.query(models.CartItem).filter(models.CartItem.user_id == user_id).all()
     return items
 
-
+# Добавление товара в корзину
 @app.post("/cart/add", response_model=schemas.CartItem, status_code=status.HTTP_201_CREATED)
 def add_item_to_cart(
     item: schemas.CartItemCreate,
@@ -46,16 +44,13 @@ def add_item_to_cart(
     user_data: dict = Depends(get_current_user)
 ):
     user_id = user_data["id"]
-    # Проверяем, есть ли уже такой товар в корзине
     cart_item = db.query(models.CartItem).filter(
         models.CartItem.user_id == user_id,
         models.CartItem.product_id == item.product_id
     ).first()
     if cart_item:
-        # Обновляем количество
         cart_item.quantity += item.quantity
     else:
-        # Создаем новый элемент корзины
         cart_item = models.CartItem(
             user_id=user_id,
             product_id=item.product_id,
@@ -66,7 +61,7 @@ def add_item_to_cart(
     db.refresh(cart_item)
     return cart_item
 
-# Эндпоинт для обновления количества товара в корзине
+# Обновление товара в корзине
 @app.put("/cart/update/{item_id}", response_model=schemas.CartItem)
 def update_cart_item(
     item_id: int,
@@ -86,7 +81,7 @@ def update_cart_item(
     db.refresh(cart_item)
     return cart_item
 
-# Эндпоинт для удаления товара из корзины
+# Удаление товара из корзины
 @app.delete("/cart/delete/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_cart_item(
     item_id: int,
