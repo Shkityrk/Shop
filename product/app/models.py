@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, Text, DECIMAL
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+from .database import Base
+
 
 class Product(Base):
     __tablename__ = 'product'
