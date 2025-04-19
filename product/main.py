@@ -13,6 +13,7 @@ origins = [
     "http://localhost",
     "http://auth:8002/",  # или другой адрес фронтенда
     "http://localhost:5173",
+
 ]
 
 
