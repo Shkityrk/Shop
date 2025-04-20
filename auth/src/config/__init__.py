@@ -4,6 +4,9 @@ from .config import (
     DATABASE_NAME,
     DATABASE_USER,
     DATABASE_PASSWORD,
+    SECRET_KEY,
+    ALGORITHM,
+    ACCESS_TOKEN_EXPIRE_MINUTES
 )
 
 __all__ = [
@@ -12,4 +15,7 @@ __all__ = [
     "DATABASE_NAME",
     "DATABASE_USER",
     "DATABASE_PASSWORD",
+    "SECRET_KEY",
+    "ALGORITHM",
+    "ACCESS_TOKEN_EXPIRE_MINUTES"
 ]
