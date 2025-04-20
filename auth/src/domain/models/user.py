@@ -1,16 +1,17 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from src.infrastructure.db.models.user_model import UserORM
 
 
 @dataclass
 class User:
-    id: int
     first_name: str
     last_name: str
     username: str
     email: str
     hashed_password: str
+    id: Optional[int] = None
 
     @classmethod
     def from_orm(cls, orm_user: UserORM) -> "User":

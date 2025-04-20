@@ -17,7 +17,7 @@ class UserRepository(AbstractUserRepository):
 
     def save(self, user: User) -> None:
         orm_user = UserORM(
-            id=user.id,
+            id = user.id,
             first_name=user.first_name,
             last_name=user.last_name,
             username=user.username,
@@ -26,6 +26,7 @@ class UserRepository(AbstractUserRepository):
         )
         self.db.add(orm_user)
         self.db.commit()
+        return User.from_orm(orm_user)
 
     def get_by_username_or_email(self, username: str, email: str) -> User | None:
         orm_user = (

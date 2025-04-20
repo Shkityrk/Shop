@@ -35,7 +35,8 @@ class AuthService:
             email=user_data.email,
             hashed_password=hashed_pw,
         )
-        return self.user_repo.create(new_user)
+        self.user_repo.save(new_user)
+        return new_user
 
     def authenticate_user(self, user_login: UserLogin) -> Optional[User]:
         user = self.user_repo.get_by_username(user_login.username)
