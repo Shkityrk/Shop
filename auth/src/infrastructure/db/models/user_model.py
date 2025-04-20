@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String
-from src.infrastructure.database import Base
+from src.infrastructure.db.base import Base
 
-__all__=[
-    "User"
+__all__ = [
+    "UserORM"
 ]
 
-class User(Base):
+class UserORM(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
