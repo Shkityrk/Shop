@@ -1,6 +1,7 @@
 #dirs
 .idea/
 .venv
+environment/
 
 postgres
 
