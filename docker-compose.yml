@@ -61,6 +61,8 @@ services:
       context: ./client
       dockerfile: Dockerfile
     container_name: frontend_app
+    env_file:
+      - environment/.client.env
     ports:
       - "5173:5173"
     command: npm run dev -- --host
