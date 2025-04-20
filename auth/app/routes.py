@@ -12,7 +12,6 @@ from .auth import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
 )
 
-from fastapi import FastAPI, Request
 auth_router = APIRouter(prefix="/auth")
 
 
@@ -100,6 +99,6 @@ def protected_route(current_user: models.User = Depends(get_current_user)):
 
 
 
-@auth_router.get("/verify-token", response_model=schemas.UserOut)
+@auth_router.get("/info", response_model=schemas.UserOut)
 def verify_token(current_user: models.User = Depends(get_current_user)):
     return current_user

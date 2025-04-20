@@ -11,8 +11,17 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-// Add request interceptor to handle CORS preflight
+// Add request interceptor to handle authentication
 api.interceptors.request.use((config) => {
+  const token = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('access_token='))
+    ?.split('=')[1];
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
   // Ensure headers are properly set for all requests
   config.headers = {
     ...config.headers,
@@ -27,6 +36,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
+      if (error.response.status === 401) {
+        // Clear any existing auth state
+        document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        window.location.href = '/login';
+      }
       console.error('Response error:', error.response.data);
     } else if (error.request) {
       console.error('Request error:', error.request);
@@ -40,6 +54,5 @@ api.interceptors.response.use(
 export const getAuthToken = () => {
   const cookies = document.cookie.split(';');
   const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('access_token='));
-  console.log(tokenCookie)
   return tokenCookie ? tokenCookie.split('=')[1] : null;
 };

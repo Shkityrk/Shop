@@ -41,10 +41,10 @@ def create_product(product: ProductCreate, db: Session = Depends(get_db)):
     return new_product
 
 
-@router.put("/update/{name}")
-def update_product(name: str, product: ProductCreate, db: Session = Depends(get_db)):
+@router.put("/update/{id}")
+def update_product(id: int, product: ProductCreate, db: Session = Depends(get_db)):
     # Поиск продукта по имени
-    db_product = db.query(models.Product).filter(models.Product.name == name).first()
+    db_product = db.query(models.Product).filter(models.Product.id == id).first()
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
 
@@ -69,9 +69,9 @@ def verify_product(product_id: int, db: Session = Depends(get_db)):
     else:
         return {"exists": False}
 
-@router.get("/info/{name}")
-def info_product(name: str, db: Session = Depends(get_db)):
-    product = db.query(models.Product).filter(models.Product.name == name).first()
+@router.get("/info/{id}")
+def info_product(id: str, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.id == id).first()
     if product:
         return {"product": product}
     else:

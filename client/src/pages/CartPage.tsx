@@ -67,10 +67,10 @@ export function CartPage() {
     0
   );
 
-  const handleQuantityChange = async (productId: number, newQuantity: number) => {
+  const handleQuantityChange = async (itemId: number, productId: number, newQuantity: number) => {
     if (newQuantity < 1) return;
     try {
-      await updateQuantity(productId.toString(), newQuantity);
+      await updateQuantity(itemId, productId, newQuantity);
       // Refresh cart data
       const response = await api.get('/cart');
       const cartItems = response.data || [];
@@ -86,10 +86,10 @@ export function CartPage() {
     }
   };
 
-  const handleRemoveItem = async (productId: number) => {
+  const handleRemoveItem = async (itemId: number) => {
     try {
-      await removeItem(productId.toString());
-      setCartProducts(prev => prev.filter(item => item.product_id !== productId));
+      await removeItem(itemId);
+      setCartProducts(prev => prev.filter(item => item.id !== itemId));
     } catch (error) {
       console.error('Failed to remove item:', error);
     }
@@ -163,7 +163,7 @@ export function CartPage() {
   return (
     <div className="max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold text-amber-900 mb-8">Shopping Cart</h1>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
           {cartProducts.map((item) => (
@@ -176,7 +176,7 @@ export function CartPage() {
                 alt={item.product?.name}
                 className="w-24 h-24 object-cover rounded"
               />
-              
+
               <div className="flex-1">
                 <h3 className="font-semibold text-amber-900">{item.product?.name}</h3>
                 <p className="text-sm text-gray-500">{item.product?.short_description}</p>
@@ -184,25 +184,25 @@ export function CartPage() {
                   ${(item.product?.price || 0).toFixed(2)}
                 </p>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => handleQuantityChange(item.product_id, item.quantity - 1)}
+                  onClick={() => handleQuantityChange(item.id, item.product_id, item.quantity - 1)}
                   className="p-1 rounded hover:bg-gray-100"
                 >
                   <Minus className="h-4 w-4" />
                 </button>
                 <span className="w-8 text-center">{item.quantity}</span>
                 <button
-                  onClick={() => handleQuantityChange(item.product_id, item.quantity + 1)}
+                  onClick={() => handleQuantityChange(item.id, item.product_id, item.quantity + 1)}
                   className="p-1 rounded hover:bg-gray-100"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
-              
+
               <button
-                onClick={() => handleRemoveItem(item.product_id)}
+                onClick={() => handleRemoveItem(item.id)}
                 className="p-2 text-red-500 hover:text-red-700 transition-colors"
               >
                 <Trash2 className="h-5 w-5" />
@@ -210,10 +210,10 @@ export function CartPage() {
             </div>
           ))}
         </div>
-        
+
         <div className="bg-white p-6 rounded-lg shadow-sm h-fit">
           <h2 className="text-xl font-semibold text-amber-900 mb-4">Order Summary</h2>
-          
+
           <div className="space-y-2 mb-4">
             <div className="flex justify-between">
               <span>Subtotal</span>
@@ -224,7 +224,7 @@ export function CartPage() {
               <span>${total.toFixed(2)}</span>
             </div>
           </div>
-          
+
           <button
             onClick={handleCheckout}
             disabled={isProcessing}
@@ -232,7 +232,7 @@ export function CartPage() {
           >
             {isProcessing ? 'Processing...' : 'Checkout'}
           </button>
-          
+
           <Link
             to="/"
             className="block text-center text-amber-600 hover:text-amber-700 mt-4"

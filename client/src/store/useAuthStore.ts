@@ -24,7 +24,7 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: Boolean(document.cookie.includes('access_token=')),
   login: async (username: string, password: string) => {
     try {
       const response = await api.post('/auth/login', { username, password });
@@ -46,6 +46,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: async () => {
     try {
       await api.post('/auth/logout');
+      document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       set({ user: null, isAuthenticated: false });
     } catch (error) {
       console.error('Logout failed:', error);

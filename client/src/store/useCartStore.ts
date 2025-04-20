@@ -6,8 +6,8 @@ import { useAuthStore } from './useAuthStore';
 interface CartState {
   items: CartItem[];
   addItem: (productId: string) => Promise<void>;
-  removeItem: (productId: string) => Promise<void>;
-  updateQuantity: (productId: string, quantity: number) => Promise<void>;
+  removeItem: (itemId: number) => Promise<void>;
+  updateQuantity: (itemId: number, productId: number, quantity: number) => Promise<void>;
   clearCart: () => Promise<void>;
   fetchCart: () => Promise<void>;
 }
@@ -16,8 +16,12 @@ export const useCartStore = create<CartState>((set) => ({
   items: [],
   fetchCart: async () => {
     try {
+      if (!useAuthStore.getState().isAuthenticated) {
+        set({ items: [] });
+        return;
+      }
       const response = await api.get('/cart');
-      set({ items: response.data.items || [] });
+      set({ items: response.data || [] });
     } catch (error) {
       console.error('Failed to fetch cart:', error);
       set({ items: [] });
@@ -33,30 +37,30 @@ export const useCartStore = create<CartState>((set) => ({
         quantity: 1
       });
       const response = await api.get('/cart');
-      set({ items: response.data.items || [] });
+      set({ items: response.data || [] });
     } catch (error) {
       console.error('Failed to add item:', error);
       throw error;
     }
   },
-  removeItem: async (productId: string) => {
+  removeItem: async (itemId: number) => {
     try {
-      await api.delete(`/cart/delete/${productId}`);
+      await api.delete(`/cart/delete/${itemId}`);
       const response = await api.get('/cart');
-      set({ items: response.data.items || [] });
+      set({ items: response.data || [] });
     } catch (error) {
       console.error('Failed to remove item:', error);
       throw error;
     }
   },
-  updateQuantity: async (productId: string, quantity: number) => {
+  updateQuantity: async (itemId: number, productId: number, quantity: number) => {
     try {
-      await api.put(`/cart/update/${productId}`, {
-        product_id: parseInt(productId),
+      await api.put(`/cart/update/${itemId}`, {
+        product_id: productId,
         quantity
       });
       const response = await api.get('/cart');
-      set({ items: response.data.items || [] });
+      set({ items: response.data || [] });
     } catch (error) {
       console.error('Failed to update quantity:', error);
       throw error;
@@ -65,9 +69,9 @@ export const useCartStore = create<CartState>((set) => ({
   clearCart: async () => {
     try {
       const response = await api.get('/cart');
-      if (response.data.items) {
-        for (const item of response.data.items) {
-          await api.delete(`/cart/delete/${item.product_id}`);
+      if (response.data) {
+        for (const item of response.data) {
+          await api.delete(`/cart/delete/${item.id}`);
         }
       }
       set({ items: [] });
