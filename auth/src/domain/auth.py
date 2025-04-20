@@ -4,9 +4,9 @@ from typing import Optional
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from .database import SessionLocal
-from . import models
-from .utils import verify_password
+from src.infrastructure.database import SessionLocal
+from src.domain import models
+from src.domain.utils import verify_password
 
 # Секретный ключ для подписи JWT
 SECRET_KEY = "your_secret_key"

@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, Request
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from datetime import timedelta
 
-from . import models, schemas
-from .database import SessionLocal
-from .utils import hash_password
-from .auth import (
+from src.schemas import schemas
+from src.domain import models
+from src.infrastructure.database import SessionLocal
+from src.domain.utils import hash_password
+from src.domain.auth import (
     authenticate_user,
     create_access_token,
     get_current_user,

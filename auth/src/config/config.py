@@ -1,0 +1,15 @@
+from src.config.env import StrEnv, IntEnv
+
+__all__ = [
+    "DATABASE_HOST",
+    "DATABASE_PORT",
+    "DATABASE_NAME",
+    "DATABASE_USER",
+    "DATABASE_PASSWORD",
+]
+
+DATABASE_HOST: str = StrEnv("DATABASE_HOST")
+DATABASE_PORT: str = StrEnv("DATABASE_PORT")
+DATABASE_NAME: str = StrEnv("DATABASE_NAME")
+DATABASE_USER: str = StrEnv("DATABASE_USER")
+DATABASE_PASSWORD: str = StrEnv("DATABASE_PASSWORD")

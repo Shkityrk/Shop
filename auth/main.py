@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import engine
-from app.models import Base
-from app.routes import auth_router
+from src.infrastructure.database import engine
+from src.domain.models import Base
+from src.presentation.routes import auth_router
 
 # Создаем таблицы
 Base.metadata.create_all(bind=engine)
