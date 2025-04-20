@@ -1,7 +1,6 @@
 from pydantic import BaseModel, EmailStr
 
-
-__all__=[
+__all__ = [
     "UserLogin",
     "UserBase",
     "UserOut",

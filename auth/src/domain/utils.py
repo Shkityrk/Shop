@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
 
-__all__=[
+__all__ = [
     "hash_password",
     "verify_password",
 ]
