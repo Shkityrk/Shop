@@ -20,11 +20,11 @@ services:
       - shop_network
 
   auth:
-    build: ./auth
+    build:
+      dockerfile: ./Dockerfile
+      context: ./auth
     env_file:
-      - ./auth/.env
-    ports:
-      - "8002:8002"
+      - environment/.auth.env
     depends_on:
       - db
     networks:
