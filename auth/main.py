@@ -1,25 +1,23 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+import asyncio
+import uvicorn
 
-from src.infrastructure.database import engine
-from src.domain.models import Base
-from src.presentation.routes import auth_router
+from src.config.config import HTTP_HOST, HTTP_PORT
+from src.presentation import app_object
+from src.infrastructure.db.base import Base
+from src.infrastructure.db.session import engine
 
-# Создаем таблицы
-Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+async def main() -> None:
+    server_config = uvicorn.Config(app_object,
+                                   host=HTTP_HOST,
+                                   port=HTTP_PORT
+                                   )
+    server = uvicorn.Server(server_config)
 
-origins = "http://localhost:5173"
+    Base.metadata.create_all(bind=engine)
 
-# Добавляем CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    await server.serve()
 
-# Подключаем маршруты
-app.include_router(auth_router)
+
+if __name__ == "__main__":
+    asyncio.run(main())
