@@ -1,4 +1,4 @@
-from src.config.env import StrEnv, IntEnv
+from src.config.env import StrEnv, IntEnv, StrListEnv
 
 __all__ = [
     "DATABASE_HOST",
@@ -8,7 +8,13 @@ __all__ = [
     "DATABASE_PASSWORD",
     "SECRET_KEY",
     "ALGORITHM",
-    "ACCESS_TOKEN_EXPIRE_MINUTES"
+    "ACCESS_TOKEN_EXPIRE_MINUTES",
+    "HTTP_HOST",
+    "HTTP_PORT",
+    "PROJECT_NAME",
+    "DOCS_URL",
+    "OPENAPI_URL",
+    "ORIGIN_URLS"
 ]
 
 DATABASE_HOST: str = StrEnv("DATABASE_HOST")
@@ -19,3 +25,12 @@ DATABASE_PASSWORD: str = StrEnv("DATABASE_PASSWORD")
 SECRET_KEY: str = StrEnv("SECRET_KEY")
 ALGORITHM: str = StrEnv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES: int = IntEnv("ACCESS_TOKEN_EXPIRE_MINUTES")
+
+HTTP_HOST: str = StrEnv("HTTP_HOST")
+HTTP_PORT: int = IntEnv("HTTP_PORT")
+
+PROJECT_NAME: str = StrEnv("PROJECT_NAME")
+DOCS_URL: str = StrEnv("DOCS_URL")
+OPENAPI_URL: str = StrEnv("OPENAPI_URL")
+
+ORIGIN_URLS: list = StrListEnv("ORIGIN_URLS")
