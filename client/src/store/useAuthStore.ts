@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { api } from '../api/client';
 
 interface User {
@@ -22,35 +23,43 @@ interface AuthState {
   logout: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  isAuthenticated: Boolean(document.cookie.includes('access_token=')),
-  login: async (username: string, password: string) => {
-    try {
-      const response = await api.post('/auth/login', { username, password });
-      set({ user: response.data.user, isAuthenticated: true });
-    } catch (error) {
-      console.error('Login failed:', error);
-      throw error;
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      isAuthenticated: Boolean(document.cookie.includes('access_token=')),
+      login: async (username: string, password: string) => {
+        try {
+          const response = await api.post('/auth/login', { username, password });
+          set({ user: response.data.user, isAuthenticated: true });
+        } catch (error) {
+          console.error('Login failed:', error);
+          throw error;
+        }
+      },
+      register: async (data) => {
+        try {
+          const response = await api.post('/auth/register', data);
+          set({ user: response.data.user, isAuthenticated: true });
+        } catch (error) {
+          console.error('Registration failed:', error);
+          throw error;
+        }
+      },
+      logout: async () => {
+        try {
+          await api.post('/auth/logout');
+          document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+          set({ user: null, isAuthenticated: false });
+        } catch (error) {
+          console.error('Logout failed:', error);
+          throw error;
+        }
+      },
+    }),
+    {
+      name: 'auth-storage',
+      partialize: (state) => ({ user: state.user, isAuthenticated: state.isAuthenticated }),
     }
-  },
-  register: async (data) => {
-    try {
-      const response = await api.post('/auth/register', data);
-      set({ user: response.data.user, isAuthenticated: true });
-    } catch (error) {
-      console.error('Registration failed:', error);
-      throw error;
-    }
-  },
-  logout: async () => {
-    try {
-      await api.post('/auth/logout');
-      document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      set({ user: null, isAuthenticated: false });
-    } catch (error) {
-      console.error('Logout failed:', error);
-      throw error;
-    }
-  },
-}));
+  )
+);
