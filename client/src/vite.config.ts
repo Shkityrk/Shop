@@ -10,17 +10,17 @@ export default defineConfig({
     proxy: {
       '/auth': {
         target: 'http://79.137.197.216',
-        changeOrigin: true,
+        changeOrigin: false,
         secure: false,
       },
       '/product': {
         target: 'http://79.137.197.216',
-        changeOrigin: true,
+        changeOrigin: false,
         secure: false,
       },
       '/cart': {
         target: 'http://79.137.197.216',
-        changeOrigin: true,
+        changeOrigin: false,
         secure: false,
       },
     },

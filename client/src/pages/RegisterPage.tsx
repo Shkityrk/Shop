@@ -105,7 +105,7 @@ export function RegisterPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">
-            Фамилия
+            First Name
           </label>
           <input
             type="text"
@@ -123,7 +123,7 @@ export function RegisterPage() {
 
         <div>
           <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">
-            Имя
+            Last Name
           </label>
           <input
             type="text"
@@ -141,7 +141,7 @@ export function RegisterPage() {
 
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-            Имя пользователя (юзернейм)
+            Username
           </label>
           <input
             type="text"
@@ -177,7 +177,7 @@ export function RegisterPage() {
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Пароль
+            Password
           </label>
           <input
             type="password"
@@ -195,7 +195,7 @@ export function RegisterPage() {
 
         <div>
           <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-            Подтвердите пароль
+            Confirm Password
           </label>
           <input
             type="password"
@@ -220,9 +220,9 @@ export function RegisterPage() {
         </button>
 
         <p className="text-center text-sm text-gray-600">
-          Уже есть аккаунт?{' '}
+          Already have an account?{' '}
           <Link to="/login" className="text-amber-600 hover:text-amber-700">
-            Войти
+            Login here
           </Link>
         </p>
       </form>

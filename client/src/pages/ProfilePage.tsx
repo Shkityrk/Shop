@@ -178,7 +178,7 @@ export function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-amber-50 p-4 rounded-lg">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-amber-900">Информация о пользователе</h3>
+                    <h3 className="text-lg font-semibold text-amber-900">Personal Information</h3>
                     <button
                       onClick={() => setIsEditing(!isEditing)}
                       className="text-amber-600 hover:text-amber-700"
@@ -189,7 +189,7 @@ export function ProfilePage() {
                   {isEditing ? (
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Фамилия</label>
+                        <label className="block text-sm font-medium text-gray-700">First Name</label>
                         <input
                           type="text"
                           value={editForm.first_name}
@@ -198,7 +198,7 @@ export function ProfilePage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Имя</label>
+                        <label className="block text-sm font-medium text-gray-700">Last Name</label>
                         <input
                           type="text"
                           value={editForm.last_name}
@@ -216,7 +216,7 @@ export function ProfilePage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Телефон</label>
+                        <label className="block text-sm font-medium text-gray-700">Phone</label>
                         <input
                           type="tel"
                           value={editForm.phone}
@@ -225,7 +225,7 @@ export function ProfilePage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Адрес доставки</label>
+                        <label className="block text-sm font-medium text-gray-700">Address</label>
                         <textarea
                           value={editForm.address}
                           onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
@@ -238,13 +238,13 @@ export function ProfilePage() {
                           onClick={() => setIsEditing(false)}
                           className="px-4 py-2 text-gray-600 hover:text-gray-700"
                         >
-                          Отмена
+                          Cancel
                         </button>
                         <button
                           onClick={handleSaveProfile}
                           className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700"
                         >
-                          Сохранить изменения
+                          Save Changes
                         </button>
                       </div>
                     </div>
@@ -254,13 +254,13 @@ export function ProfilePage() {
                         <span className="font-medium">Email:</span> {profile.email}
                       </p>
                       <p className="text-gray-600">
-                        <span className="font-medium">Phone:</span> {profile.phone || 'Не указано'}
+                        <span className="font-medium">Phone:</span> {profile.phone || 'Not provided'}
                       </p>
                       <p className="text-gray-600">
-                        <span className="font-medium">Address:</span> {profile.address || 'Не указано'}
+                        <span className="font-medium">Address:</span> {profile.address || 'Not provided'}
                       </p>
                       <p className="text-gray-600">
-                        <span className="font-medium">Member since:</span>{' ' || 'Не указано'}
+                        <span className="font-medium">Member since:</span>{' '}
                         {new Date(profile.created_at).toLocaleDateString()}
                       </p>
                     </div>
@@ -268,7 +268,7 @@ export function ProfilePage() {
                 </div>
 
                 <div className="bg-amber-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-semibold text-amber-900 mb-4">Последняя активность</h3>
+                  <h3 className="text-lg font-semibold text-amber-900 mb-4">Recent Activity</h3>
                   <div className="space-y-4">
                     {orders.slice(0, 3).map((order) => (
                       <div key={order.id} className="flex items-center space-x-3">
@@ -293,17 +293,11 @@ export function ProfilePage() {
 
           {activeTab === 'orders' && (
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-amber-900">История заказов</h3>
+              <h3 className="text-xl font-semibold text-amber-900">Order History</h3>
               <div className="space-y-4">
                 {orders.map((order) => (
                   <div key={order.id} className="bg-white border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-4">
-
-                      <div>
-                        <p className="font-medium text-amber-900">В разработке!</p>
-                      </div>
-
-
                       <div>
                         <p className="font-medium text-amber-900">Order #{order.id}</p>
                         <p className="text-sm text-gray-500">
@@ -333,10 +327,10 @@ export function ProfilePage() {
 
           {activeTab === 'settings' && (
             <div className="max-w-2xl space-y-6">
-              <h3 className="text-xl font-semibold text-amber-900">Настройки аккаунта</h3>
+              <h3 className="text-xl font-semibold text-amber-900">Account Settings</h3>
               <div className="space-y-4">
                 <div className="bg-amber-50 p-4 rounded-lg">
-                  <h4 className="font-medium text-amber-900 mb-2">Рассылка Email</h4>
+                  <h4 className="font-medium text-amber-900 mb-2">Email Preferences</h4>
                   <div className="space-y-2">
                     <label className="flex items-center">
                       <input type="checkbox" className="rounded text-amber-600" />
@@ -348,25 +342,25 @@ export function ProfilePage() {
                     </label>
                     <label className="flex items-center">
                       <input type="checkbox" className="rounded text-amber-600" />
-                      <span className="ml-2 text-sm text-gray-700">Новости</span>
+                      <span className="ml-2 text-sm text-gray-700">Newsletter</span>
                     </label>
                   </div>
                 </div>
 
                 <div className="bg-amber-50 p-4 rounded-lg">
-                  <h4 className="font-medium text-amber-900 mb-2">Пароль</h4>
+                  <h4 className="font-medium text-amber-900 mb-2">Password</h4>
                   <button className="text-amber-600 hover:text-amber-700 text-sm font-medium">
-                    Изменить пароль
+                    Change Password
                   </button>
                 </div>
 
                 <div className="bg-amber-50 p-4 rounded-lg">
-                  <h4 className="font-medium text-amber-900 mb-2">Удалить аккаунт</h4>
+                  <h4 className="font-medium text-amber-900 mb-2">Delete Account</h4>
                   <p className="text-sm text-gray-600 mb-2">
-                    Как только вы удалите свою учетную запись, пути назад не будет. Пожалуйста, будьте уверены.
+                    Once you delete your account, there is no going back. Please be certain.
                   </p>
                   <button className="text-red-600 hover:text-red-700 text-sm font-medium">
-                    Удалить аккаунт
+                    Delete Account
                   </button>
                 </div>
               </div>

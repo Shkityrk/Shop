@@ -139,7 +139,7 @@ export function CartPage() {
           onClick={() => window.location.reload()}
           className="text-amber-600 hover:text-amber-700"
         >
-          Ошибка. Повторите, пожалуйста, еще раз.
+          Try again
         </button>
       </div>
     );
@@ -154,7 +154,7 @@ export function CartPage() {
           className="flex items-center text-amber-600 hover:text-amber-700"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Продолжить покупки
+          Continue Shopping
         </Link>
       </div>
     );
@@ -162,8 +162,8 @@ export function CartPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-amber-900 mb-8">Корзина</h1>
-
+      <h1 className="text-3xl font-bold text-amber-900 mb-8">Shopping Cart</h1>
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
           {cartProducts.map((item) => (
@@ -176,7 +176,7 @@ export function CartPage() {
                 alt={item.product?.name}
                 className="w-24 h-24 object-cover rounded"
               />
-
+              
               <div className="flex-1">
                 <h3 className="font-semibold text-amber-900">{item.product?.name}</h3>
                 <p className="text-sm text-gray-500">{item.product?.short_description}</p>
@@ -184,7 +184,7 @@ export function CartPage() {
                   ${(item.product?.price || 0).toFixed(2)}
                 </p>
               </div>
-
+              
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleQuantityChange(item.id, item.product_id, item.quantity - 1)}
@@ -200,7 +200,7 @@ export function CartPage() {
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
-
+              
               <button
                 onClick={() => handleRemoveItem(item.id)}
                 className="p-2 text-red-500 hover:text-red-700 transition-colors"
@@ -210,34 +210,34 @@ export function CartPage() {
             </div>
           ))}
         </div>
-
+        
         <div className="bg-white p-6 rounded-lg shadow-sm h-fit">
-          <h2 className="text-xl font-semibold text-amber-900 mb-4">Статистика заказа</h2>
-
+          <h2 className="text-xl font-semibold text-amber-900 mb-4">Order Summary</h2>
+          
           <div className="space-y-2 mb-4">
             <div className="flex justify-between">
-              <span>Предварительная сумма</span>
+              <span>Subtotal</span>
               <span>${total.toFixed(2)}</span>
             </div>
             <div className="flex justify-between font-bold text-lg border-t pt-2">
-              <span>Итого</span>
+              <span>Total</span>
               <span>${total.toFixed(2)}</span>
             </div>
           </div>
-
+          
           <button
             onClick={handleCheckout}
             disabled={isProcessing}
             className="w-full bg-amber-600 text-white py-3 rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50"
           >
-            {isProcessing ? 'Подождите...' : 'Заказать'}
+            {isProcessing ? 'Processing...' : 'Checkout'}
           </button>
-
+          
           <Link
             to="/"
             className="block text-center text-amber-600 hover:text-amber-700 mt-4"
           >
-            Продолжить покупки
+            Continue Shopping
           </Link>
         </div>
       </div>

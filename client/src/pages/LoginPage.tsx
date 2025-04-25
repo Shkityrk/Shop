@@ -27,11 +27,11 @@ export function LoginPage() {
     const newErrors: FormErrors = {};
     
     if (!formData.username) {
-      newErrors.username = 'Необходимо имя пользователя!';
+      newErrors.username = 'Username is required';
     }
     
     if (!formData.password) {
-      newErrors.password = 'Необходим пароль!';
+      newErrors.password = 'Password is required';
     }
 
     setErrors(newErrors);
@@ -49,7 +49,7 @@ export function LoginPage() {
       await login(formData.username, formData.password);
       navigate('/');
     } catch (error) {
-      setServerError('Неправильное имя пользователя или пароль');
+      setServerError('Invalid username or password');
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +68,7 @@ export function LoginPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-            Имя пользователя
+            Username
           </label>
           <input
             type="text"
@@ -86,7 +86,7 @@ export function LoginPage() {
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Пароль
+            Password
           </label>
           <input
             type="password"
@@ -107,14 +107,14 @@ export function LoginPage() {
           disabled={isLoading}
           className="w-full bg-amber-600 text-white py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:opacity-50"
         >
-          {isLoading ? 'Вход ...' : 'Войти'}
+          {isLoading ? 'Logging in...' : 'Login'}
         </button>
 
         <div className="text-center mt-4">
           <p className="text-gray-600">
             Don't have an account?{' '}
             <Link to="/register" className="text-amber-600 hover:text-amber-700 font-medium">
-              Зарегистрироваться
+              Register here
             </Link>
           </p>
         </div>
