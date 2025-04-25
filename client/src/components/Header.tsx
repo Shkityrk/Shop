@@ -5,8 +5,7 @@ import { useCartStore } from '../store/useCartStore';
 
 export function Header() {
   const { isAuthenticated } = useAuthStore();
-  const { items } = useCartStore();
-  const itemCount = items.reduce((acc, item) => acc + item.quantity, 0);
+  const { itemCount } = useCartStore();
 
   return (
     <header className="bg-amber-100 shadow-md">
@@ -16,20 +15,20 @@ export function Header() {
             <Croissant className="h-8 w-8 text-amber-600" />
             <span className="text-2xl font-bold text-amber-900">Sweet Bakery</span>
           </Link>
-          
+
           <nav className="flex items-center space-x-6">
             <Link
               to="/cart"
               className="relative flex items-center text-amber-900 hover:text-amber-700"
             >
               <ShoppingCart className="h-6 w-6" />
-              {itemCount > 0 && (
+              {isAuthenticated && itemCount >= 0 && (
                 <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-amber-600 text-xs text-white">
                   {itemCount}
                 </span>
               )}
             </Link>
-            
+
             <Link
               to={isAuthenticated ? "/profile" : "/login"}
               className="flex items-center text-amber-900 hover:text-amber-700"
