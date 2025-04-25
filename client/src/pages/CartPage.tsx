@@ -139,7 +139,7 @@ export function CartPage() {
           onClick={() => window.location.reload()}
           className="text-amber-600 hover:text-amber-700"
         >
-          Try again
+          Ошибка. Повторите, пожалуйста, еще раз.
         </button>
       </div>
     );
@@ -154,7 +154,7 @@ export function CartPage() {
           className="flex items-center text-amber-600 hover:text-amber-700"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Continue Shopping
+          Продолжить покупки
         </Link>
       </div>
     );
@@ -162,7 +162,7 @@ export function CartPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-amber-900 mb-8">Shopping Cart</h1>
+      <h1 className="text-3xl font-bold text-amber-900 mb-8">Корзина</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
@@ -212,15 +212,15 @@ export function CartPage() {
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-sm h-fit">
-          <h2 className="text-xl font-semibold text-amber-900 mb-4">Order Summary</h2>
+          <h2 className="text-xl font-semibold text-amber-900 mb-4">Статистика заказа</h2>
 
           <div className="space-y-2 mb-4">
             <div className="flex justify-between">
-              <span>Subtotal</span>
+              <span>Предварительная сумма</span>
               <span>${total.toFixed(2)}</span>
             </div>
             <div className="flex justify-between font-bold text-lg border-t pt-2">
-              <span>Total</span>
+              <span>Итого</span>
               <span>${total.toFixed(2)}</span>
             </div>
           </div>
@@ -230,14 +230,14 @@ export function CartPage() {
             disabled={isProcessing}
             className="w-full bg-amber-600 text-white py-3 rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50"
           >
-            {isProcessing ? 'Processing...' : 'Checkout'}
+            {isProcessing ? 'Подождите...' : 'Заказать'}
           </button>
 
           <Link
             to="/"
             className="block text-center text-amber-600 hover:text-amber-700 mt-4"
           >
-            Continue Shopping
+            Продолжить покупки
           </Link>
         </div>
       </div>
