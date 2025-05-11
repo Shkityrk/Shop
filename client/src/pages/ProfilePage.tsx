@@ -52,18 +52,20 @@ export function ProfilePage() {
       try {
         // Fetch user profile
         const profileResponse = await api.get('/auth/info');
-        setProfile(profileResponse.data);
+        const profileData = profileResponse.data;
+        setProfile(profileData);
         setEditForm({
-          first_name: profileResponse.data.first_name || '',
-          last_name: profileResponse.data.last_name || '',
-          email: profileResponse.data.email || '',
-          phone: profileResponse.data.phone || '',
-          address: profileResponse.data.address || ''
+          first_name: profileData.first_name || '',
+          last_name: profileData.last_name || '',
+          email: profileData.email || '',
+          phone: profileData.phone || '',
+          address: profileData.address || ''
         });
 
         // Fetch order history
         const ordersResponse = await api.get('/orders');
-        setOrders(ordersResponse.data || []);
+        const ordersData = Array.isArray(ordersResponse.data) ? ordersResponse.data : [];
+        setOrders(ordersData);
       } catch (error) {
         console.error('Failed to fetch user data:', error);
       } finally {
@@ -85,7 +87,7 @@ export function ProfilePage() {
 
   const handleSaveProfile = async () => {
     try {
-      await api.put('/auth/info', editForm);
+      await api.put('/user/profile', editForm);
       setProfile(prev => ({ ...prev!, ...editForm }));
       setIsEditing(false);
     } catch (error) {
@@ -285,6 +287,9 @@ export function ProfilePage() {
                         </div>
                       </div>
                     ))}
+                    {orders.length === 0 && (
+                      <p className="text-gray-500">No recent orders</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -312,7 +317,7 @@ export function ProfilePage() {
                       </div>
                     </div>
                     <div className="border-t pt-4">
-                      {order.items.map((item, index) => (
+                      {order.items && order.items.map((item, index) => (
                         <div key={index} className="flex justify-between text-sm">
                           <span>{item.product_name} x{item.quantity}</span>
                           <span>${(item.price * item.quantity).toFixed(2)}</span>
@@ -321,6 +326,9 @@ export function ProfilePage() {
                     </div>
                   </div>
                 ))}
+                {orders.length === 0 && (
+                  <p className="text-gray-500">No orders found</p>
+                )}
               </div>
             </div>
           )}
