@@ -11,12 +11,14 @@ services:
       - shop_network
 
   product:
-    build: ./product
-    ports:
-      - "8001:8001"
+    build:
+      dockerfile: ./Dockerfile
+      context: ./product
+    env_file:
+      - environment/.product.env
     depends_on:
       - db
-    networks: 
+    networks:
       - shop_network
 
   auth:
