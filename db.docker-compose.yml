@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:13
+    env_file:
+      - environment/.database.env
+    volumes:
+#      - db_data:/var/lib/postgresql/data
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - database
+
+networks:
+  database:
+    driver: bridge
