@@ -7,7 +7,7 @@ def deployBackup() {
         sh 'rm -rf ./*'
         sh 'cp -r /var/Shop/backup_repo/* ./'
         echo "Запускаем старую версию"
-        sh 'docker compose -f .\prod.docker-compose.yml up --build -d'
+        sh 'docker compose -f prod.docker-compose.yml up --build -d'
         echo "Сбой новой версии, выполнен откат"
 
     } else {
@@ -105,7 +105,7 @@ pipeline {
             }
             steps {
                 script {
-                    echo "docker compose -f .\prod.docker-compose.yml down"
+                    echo "docker compose -f prod.docker-compose.yml down"
 
 
                     def runningContainers = sh(
@@ -174,9 +174,9 @@ pipeline {
             steps {
                 script {
 
-                    echo "docker compose -f .\prod.docker-compose.yml up --build -d"
+                    echo "docker compose -f prod.docker-compose.yml up --build -d"
                     try {
-                        sh 'docker compose -f .\prod.docker-compose.yml up --build -d'
+                        sh 'docker compose -f prod.docker-compose.yml up --build -d'
                         echo "DEPLOY:OK"
                     } catch (Exception e) {
                         echo "Ошибка при деплое: ${e.getMessage()}"
