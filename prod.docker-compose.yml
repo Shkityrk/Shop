@@ -1,0 +1,70 @@
+services:
+  product:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./product
+    env_file:
+      - environment/.product.env
+    networks:
+      - shop_network
+
+  auth:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./auth
+    env_file:
+      - environment/.auth.env
+    networks:
+      - shop_network
+
+  cart:
+    build: ./cart
+    ports:
+      - "8003:8003"
+    depends_on:
+      - auth
+    env_file:
+      - environment/.cart.env
+    networks:
+      - shop_network
+
+  nginx:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./client/dist:/usr/share/nginx/html
+      - ./environment/shop.key:/etc/nginx/shop.key:ro
+      - ./environment/shop.crt:/etc/nginx/shop.crt:ro
+    depends_on:
+      - product
+      - auth
+    networks:
+      - shop_network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: frontend_app
+    env_file:
+      - environment/.client.env
+    environment:
+      - NODE_ENV=development
+    command: npm run build
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - auth
+      - product
+      - cart
+    networks:
+      - shop_network
+
+networks:
+  shop_network:
+    driver: bridge
