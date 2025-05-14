@@ -84,7 +84,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   className="w-full flex items-center justify-center bg-amber-600 text-white py-2 px-4 rounded-md hover:bg-amber-700 transition-colors"
               >
                 <ShoppingCart className="h-4 w-4 mr-2" />
-                Add to Cart
+                Добавить в корзину
               </button>
           )}
         </div>
