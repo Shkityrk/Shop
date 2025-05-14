@@ -10,7 +10,7 @@ import { ProfilePage } from './pages/ProfilePage';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-amber-50">
+      <div className="min-h-screen bg-blue-50">
         <Header />
         <main className="container mx-auto px-4 py-8">
           <Routes>

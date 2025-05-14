@@ -105,7 +105,7 @@ export function RegisterPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">
-            First Name
+            Имя
           </label>
           <input
             type="text"
@@ -123,7 +123,7 @@ export function RegisterPage() {
 
         <div>
           <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">
-            Last Name
+            Фамилия
           </label>
           <input
             type="text"
@@ -216,7 +216,7 @@ export function RegisterPage() {
           disabled={isLoading}
           className="w-full bg-amber-600 text-white py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:opacity-50"
         >
-          {isLoading ? 'Creating account...' : 'Create Account'}
+          {isLoading ? 'Обработка...' : 'Создать аккаунт'}
         </button>
 
         <p className="text-center text-sm text-gray-600">

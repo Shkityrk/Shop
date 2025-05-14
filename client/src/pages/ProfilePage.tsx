@@ -256,10 +256,10 @@ export function ProfilePage() {
                         <span className="font-medium">Почта:</span> {profile.email}
                       </p>
                       <p className="text-gray-600">
-                        <span className="font-medium">Телефон:</span> {profile.phone || 'Not provided'}
+                        <span className="font-medium">Телефон:</span> {profile.phone || 'Нет информации'}
                       </p>
                       <p className="text-gray-600">
-                        <span className="font-medium">Адрес:</span> {profile.address || 'Not provided'}
+                        <span className="font-medium">Адрес:</span> {profile.address || 'Нет информации'}
                       </p>
                       <p className="text-gray-600">
                         <span className="font-medium">Зарегистрирован с :</span>{' '}
@@ -338,7 +338,7 @@ export function ProfilePage() {
               <h3 className="text-xl font-semibold text-amber-900">Параметры</h3>
               <div className="space-y-4">
                 <div className="bg-amber-50 p-4 rounded-lg">
-                  <h4 className="font-medium text-amber-900 mb-2">ПОчта</h4>
+                  <h4 className="font-medium text-amber-900 mb-2">Почта</h4>
                   <div className="space-y-2">
                     <label className="flex items-center">
                       <input type="checkbox" className="rounded text-amber-600" />

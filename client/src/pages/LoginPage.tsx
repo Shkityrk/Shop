@@ -68,7 +68,7 @@ export function LoginPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-            Username
+            Имя пользователя
           </label>
           <input
             type="text"
@@ -86,7 +86,7 @@ export function LoginPage() {
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Password
+            Пароль
           </label>
           <input
             type="password"
@@ -107,7 +107,7 @@ export function LoginPage() {
           disabled={isLoading}
           className="w-full bg-amber-600 text-white py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:opacity-50"
         >
-          {isLoading ? 'Logging in...' : 'Login'}
+          {isLoading ? 'Вход...' : 'Войти'}
         </button>
 
         <div className="text-center mt-4">

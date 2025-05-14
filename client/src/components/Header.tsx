@@ -14,7 +14,7 @@ export function Header() {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
             <Croissant className="h-8 w-8 text-amber-600" />
-            <span className="text-2xl font-bold text-amber-900">Sweet Bakery</span>
+            <span className="text-2xl font-bold text-amber-900">Магазин выпечки</span>
           </Link>
           
           <nav className="flex items-center space-x-6">

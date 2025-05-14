@@ -112,12 +112,12 @@ export function CartPage() {
   if (!isAuthenticated) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-        <p className="text-lg text-gray-600">Please login to view your cart</p>
+        <p className="text-lg text-gray-600">Войдите, чтобы видеть корзину</p>
         <Link
           to="/login"
           className="bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700 transition-colors"
         >
-          Login
+          Войти
         </Link>
       </div>
     );
@@ -148,13 +148,13 @@ export function CartPage() {
   if (cartProducts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-        <p className="text-lg text-gray-600">Your cart is empty</p>
+        <p className="text-lg text-gray-600">Ваша корзина пустая</p>
         <Link
           to="/"
           className="flex items-center text-amber-600 hover:text-amber-700"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Continue Shopping
+          Продолжить покупки
         </Link>
       </div>
     );
@@ -212,15 +212,15 @@ export function CartPage() {
         </div>
         
         <div className="bg-white p-6 rounded-lg shadow-sm h-fit">
-          <h2 className="text-xl font-semibold text-amber-900 mb-4">Order Summary</h2>
+          <h2 className="text-xl font-semibold text-amber-900 mb-4">Итог</h2>
           
           <div className="space-y-2 mb-4">
             <div className="flex justify-between">
-              <span>Subtotal</span>
+              <span>Предварительная цена</span>
               <span>${total.toFixed(2)}</span>
             </div>
             <div className="flex justify-between font-bold text-lg border-t pt-2">
-              <span>Total</span>
+              <span>Всего</span>
               <span>${total.toFixed(2)}</span>
             </div>
           </div>
@@ -230,14 +230,14 @@ export function CartPage() {
             disabled={isProcessing}
             className="w-full bg-amber-600 text-white py-3 rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50"
           >
-            {isProcessing ? 'Processing...' : 'Checkout'}
+            {isProcessing ? 'Обработка...' : 'Проверка'}
           </button>
           
           <Link
             to="/"
             className="block text-center text-amber-600 hover:text-amber-700 mt-4"
           >
-            Continue Shopping
+            Продолжить покупки
           </Link>
         </div>
       </div>
