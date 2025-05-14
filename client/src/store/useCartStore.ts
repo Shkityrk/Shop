@@ -5,6 +5,7 @@ import { useAuthStore } from './useAuthStore';
 
 interface CartState {
   items: CartItem[];
+  isLoading: boolean;
   addItem: (productId: string) => Promise<void>;
   removeItem: (itemId: number) => Promise<void>;
   updateQuantity: (itemId: number, productId: number, quantity: number) => Promise<void>;
@@ -14,13 +15,15 @@ interface CartState {
 
 export const useCartStore = create<CartState>((set) => ({
   items: [],
+  isLoading: false,
   fetchCart: async () => {
     try {
       if (!useAuthStore.getState().isAuthenticated) {
         set({ items: [] });
         return;
       }
-      const response = await api.get('/cart');
+
+      set({ isLoading: true });
       const cartResponse = await api.get('/cart');
       const cartItems = cartResponse.data || [];
 
@@ -34,10 +37,10 @@ export const useCartStore = create<CartState>((set) => ({
         product: products.find((p: any) => p.id === cartItem.product_id)
       }));
 
-      set({ items: cartWithProducts });
+      set({ items: cartWithProducts, isLoading: false });
     } catch (error) {
       console.error('Failed to fetch cart:', error);
-      set({ items: [] });
+      set({ items: [], isLoading: false });
     }
   },
   addItem: async (productId: string) => {
@@ -49,8 +52,15 @@ export const useCartStore = create<CartState>((set) => ({
         product_id: parseInt(productId),
         quantity: 1
       });
-      const response = await api.get('/cart');
-      set({ items: response.data || [] });
+      const cartResponse = await api.get('/cart');
+      const cartItems = cartResponse.data || [];
+      const productsResponse = await api.get('/product/list');
+      const products = productsResponse.data || [];
+      const cartWithProducts = cartItems.map((cartItem: CartItem) => ({
+        ...cartItem,
+        product: products.find((p: any) => p.id === cartItem.product_id)
+      }));
+      set({ items: cartWithProducts });
     } catch (error) {
       console.error('Failed to add item:', error);
       throw error;
@@ -72,8 +82,15 @@ export const useCartStore = create<CartState>((set) => ({
         product_id: productId,
         quantity
       });
-      const response = await api.get('/cart');
-      set({ items: response.data || [] });
+      const cartResponse = await api.get('/cart');
+      const cartItems = cartResponse.data || [];
+      const productsResponse = await api.get('/product/list');
+      const products = productsResponse.data || [];
+      const cartWithProducts = cartItems.map((cartItem: CartItem) => ({
+        ...cartItem,
+        product: products.find((p: any) => p.id === cartItem.product_id)
+      }));
+      set({ items: cartWithProducts });
     } catch (error) {
       console.error('Failed to update quantity:', error);
       throw error;

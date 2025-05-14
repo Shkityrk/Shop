@@ -15,11 +15,20 @@ function App() {
   const { fetchCart } = useCartStore();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      // Fetch cart data immediately when the app loads and user is authenticated
-      fetchCart();
-    }
-  }, [isAuthenticated]); // Only re-run when authentication status changes
+    let mounted = true;
+
+    const loadCart = async () => {
+      if (isAuthenticated && mounted) {
+        await fetchCart();
+      }
+    };
+
+    loadCart();
+
+    return () => {
+      mounted = false;
+    };
+  }, [isAuthenticated]); // Remove fetchCart from dependencies
 
   return (
       <Router>
@@ -39,5 +48,3 @@ function App() {
       </Router>
   );
 }
-
-export default App;
