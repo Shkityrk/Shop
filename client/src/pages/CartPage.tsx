@@ -217,11 +217,11 @@ export function CartPage() {
           <div className="space-y-2 mb-4">
             <div className="flex justify-between">
               <span>Предварительная цена</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{total.toFixed(2)} ₽</span>
             </div>
             <div className="flex justify-between font-bold text-lg border-t pt-2">
               <span>Всего</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{total.toFixed(2)} ₽</span>
             </div>
           </div>
           
