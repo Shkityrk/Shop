@@ -181,7 +181,7 @@ export function CartPage() {
                 <h3 className="font-semibold text-amber-900">{item.product?.name}</h3>
                 <p className="text-sm text-gray-500">{item.product?.short_description}</p>
                 <p className="font-bold text-amber-600 mt-1">
-                  ${(item.product?.price || 0).toFixed(2)}
+                  {(item.product?.price || 0).toFixed(2)} ₽
                 </p>
               </div>
               

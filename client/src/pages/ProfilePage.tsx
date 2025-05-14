@@ -279,7 +279,7 @@ export function ProfilePage() {
                         </div>
                         <div>
                           <p className="text-sm font-medium text-amber-900">
-                            Order #{order.id} - ${order.total.toFixed(2)}
+                            Order #{order.id} - {order.total.toFixed(2)} ₽
                           </p>
                           <p className="text-xs text-gray-500">
                             {new Date(order.created_at).toLocaleDateString()}
@@ -310,7 +310,7 @@ export function ProfilePage() {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium text-amber-600">${order.total.toFixed(2)}</p>
+                        <p className="font-medium text-amber-600">{order.total.toFixed(2)} ₽</p>
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           {order.status}
                         </span>
@@ -320,7 +320,7 @@ export function ProfilePage() {
                       {order.items && order.items.map((item, index) => (
                         <div key={index} className="flex justify-between text-sm">
                           <span>{item.product_name} x{item.quantity}</span>
-                          <span>${(item.price * item.quantity).toFixed(2)}</span>
+                          <span>{(item.price * item.quantity).toFixed(2)} ₽</span>
                         </div>
                       ))}
                     </div>

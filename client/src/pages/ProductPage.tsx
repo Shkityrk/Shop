@@ -80,7 +80,7 @@ export function ProductPage() {
           <p className="text-gray-600">{product.full_description}</p>
           
           <div className="text-2xl font-bold text-amber-600">
-            {product.price.toFixed(2)}₽
+            {product.price.toFixed(2)} ₽
           </div>
 
           <div className="text-sm text-gray-500">

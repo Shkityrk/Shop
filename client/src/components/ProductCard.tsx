@@ -55,7 +55,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <h3 className="text-xl font-semibold text-amber-900">{product.name}</h3>
             <p className="mt-2 text-sm text-gray-600 line-clamp-2">{product.short_description}</p>
             <div className="mt-4 flex items-center justify-between">
-              <span className="text-lg font-bold text-amber-600">${product.price.toFixed(2)}</span>
+              <span className="text-lg font-bold text-amber-600">{product.price.toFixed(2)} ₽</span>
               <span className="text-sm text-gray-500">{product.weight}g</span>
             </div>
           </div>
