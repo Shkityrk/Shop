@@ -27,11 +27,11 @@ export function LoginPage() {
     const newErrors: FormErrors = {};
     
     if (!formData.username) {
-      newErrors.username = 'Username is required';
+      newErrors.username = 'Требуется имя пользователя';
     }
     
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'Требуется пароль';
     }
 
     setErrors(newErrors);
@@ -49,7 +49,7 @@ export function LoginPage() {
       await login(formData.username, formData.password);
       navigate('/');
     } catch (error) {
-      setServerError('Invalid username or password');
+      setServerError('Неправильное имя пользователя или пароль');
     } finally {
       setIsLoading(false);
     }
@@ -57,7 +57,7 @@ export function LoginPage() {
 
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-2xl font-bold text-amber-900 mb-6">Login to Your Account</h1>
+      <h1 className="text-2xl font-bold text-amber-900 mb-6">Войти в аккаунт</h1>
       
       {serverError && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -112,9 +112,9 @@ export function LoginPage() {
 
         <div className="text-center mt-4">
           <p className="text-gray-600">
-            Don't have an account?{' '}
+            Нет аккаунта?{' '}
             <Link to="/register" className="text-amber-600 hover:text-amber-700 font-medium">
-              Register here
+              Зарегистрироваться
             </Link>
           </p>
         </div>

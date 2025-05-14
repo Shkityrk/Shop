@@ -39,31 +39,31 @@ export function RegisterPage() {
     const newErrors: FormErrors = {};
     
     if (!formData.first_name.trim()) {
-      newErrors.first_name = 'First name is required';
+      newErrors.first_name = 'Требуется указать имя';
     }
     
     if (!formData.last_name.trim()) {
-      newErrors.last_name = 'Last name is required';
+      newErrors.last_name = 'Требуется указать фамилию';
     }
     
     if (!formData.username.trim()) {
-      newErrors.username = 'Username is required';
+      newErrors.username = 'Требуется имя пользователя';
     }
     
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Требуется электронная почта';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = 'Пожалуйста, введите действительный адрес электронной почты';
     }
     
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'Требуется ввести пароль';
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters long';
+      newErrors.password = 'Длина пароля должна составлять не менее 6 символов';
     }
     
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = 'Пароли не совпадают';
     }
 
     setErrors(newErrors);
@@ -85,7 +85,7 @@ export function RegisterPage() {
       if (error instanceof Error) {
         setServerError(error.message);
       } else {
-        setServerError('Registration failed. Please try again.');
+        setServerError('Регистрация не удалась. Пожалуйста, попробуйте снова.');
       }
     } finally {
       setIsLoading(false);
@@ -94,7 +94,7 @@ export function RegisterPage() {
 
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-2xl font-bold text-amber-900 mb-6">Create an Account</h1>
+      <h1 className="text-2xl font-bold text-amber-900 mb-6">Создать аккаунт</h1>
       
       {serverError && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -141,7 +141,7 @@ export function RegisterPage() {
 
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-            Username
+            Имя пользователя
           </label>
           <input
             type="text"
@@ -159,7 +159,7 @@ export function RegisterPage() {
 
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email
+            Почта
           </label>
           <input
             type="email"
@@ -177,7 +177,7 @@ export function RegisterPage() {
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Password
+            Пароль
           </label>
           <input
             type="password"
@@ -195,7 +195,7 @@ export function RegisterPage() {
 
         <div>
           <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-            Confirm Password
+            Подтверждение пароля
           </label>
           <input
             type="password"
@@ -220,9 +220,9 @@ export function RegisterPage() {
         </button>
 
         <p className="text-center text-sm text-gray-600">
-          Already have an account?{' '}
+          Уже есть аккаунт?{' '}
           <Link to="/login" className="text-amber-600 hover:text-amber-700">
-            Login here
+            Войти
           </Link>
         </p>
       </form>

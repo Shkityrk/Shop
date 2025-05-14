@@ -67,7 +67,7 @@ export function ProfilePage() {
         const ordersData = Array.isArray(ordersResponse.data) ? ordersResponse.data : [];
         setOrders(ordersData);
       } catch (error) {
-        console.error('Failed to fetch user data:', error);
+        console.error('Не удалось получить пользовательские данные:', error);
       } finally {
         setIsLoading(false);
       }
@@ -81,7 +81,7 @@ export function ProfilePage() {
       await logout();
       navigate('/');
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error('Не удалось выйти из системы:', error);
     }
   };
 
@@ -129,7 +129,7 @@ export function ProfilePage() {
               className="flex items-center px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
             >
               <LogOut className="h-5 w-5 mr-2" />
-              Logout
+              Выйти из системы
             </button>
           </div>
         </div>
@@ -146,7 +146,7 @@ export function ProfilePage() {
               }`}
             >
               <User className="h-4 w-4 inline mr-2" />
-              Overview
+              Обзор
             </button>
             <button
               onClick={() => setActiveTab('orders')}
@@ -157,7 +157,7 @@ export function ProfilePage() {
               }`}
             >
               <Package className="h-4 w-4 inline mr-2" />
-              Orders
+              Заказы
             </button>
             <button
               onClick={() => setActiveTab('settings')}
@@ -168,7 +168,7 @@ export function ProfilePage() {
               }`}
             >
               <Settings className="h-4 w-4 inline mr-2" />
-              Settings
+              Параметры
             </button>
           </nav>
         </div>
@@ -180,7 +180,7 @@ export function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-amber-50 p-4 rounded-lg">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-amber-900">Personal Information</h3>
+                    <h3 className="text-lg font-semibold text-amber-900">Информация</h3>
                     <button
                       onClick={() => setIsEditing(!isEditing)}
                       className="text-amber-600 hover:text-amber-700"
@@ -191,7 +191,7 @@ export function ProfilePage() {
                   {isEditing ? (
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">First Name</label>
+                        <label className="block text-sm font-medium text-gray-700">Фамилия</label>
                         <input
                           type="text"
                           value={editForm.first_name}
@@ -200,7 +200,7 @@ export function ProfilePage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Last Name</label>
+                        <label className="block text-sm font-medium text-gray-700">Имя</label>
                         <input
                           type="text"
                           value={editForm.last_name}
@@ -209,7 +209,7 @@ export function ProfilePage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Email</label>
+                        <label className="block text-sm font-medium text-gray-700">Почта</label>
                         <input
                           type="email"
                           value={editForm.email}
@@ -218,7 +218,7 @@ export function ProfilePage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Phone</label>
+                        <label className="block text-sm font-medium text-gray-700">Номер телефона</label>
                         <input
                           type="tel"
                           value={editForm.phone}
@@ -227,7 +227,7 @@ export function ProfilePage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Address</label>
+                        <label className="block text-sm font-medium text-gray-700">Адрес</label>
                         <textarea
                           value={editForm.address}
                           onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
@@ -240,29 +240,29 @@ export function ProfilePage() {
                           onClick={() => setIsEditing(false)}
                           className="px-4 py-2 text-gray-600 hover:text-gray-700"
                         >
-                          Cancel
+                          Отмена
                         </button>
                         <button
                           onClick={handleSaveProfile}
                           className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700"
                         >
-                          Save Changes
+                          Сохранить
                         </button>
                       </div>
                     </div>
                   ) : (
                     <div className="space-y-3">
                       <p className="text-gray-600">
-                        <span className="font-medium">Email:</span> {profile.email}
+                        <span className="font-medium">Почта:</span> {profile.email}
                       </p>
                       <p className="text-gray-600">
-                        <span className="font-medium">Phone:</span> {profile.phone || 'Not provided'}
+                        <span className="font-medium">Телефон:</span> {profile.phone || 'Not provided'}
                       </p>
                       <p className="text-gray-600">
-                        <span className="font-medium">Address:</span> {profile.address || 'Not provided'}
+                        <span className="font-medium">Адрес:</span> {profile.address || 'Not provided'}
                       </p>
                       <p className="text-gray-600">
-                        <span className="font-medium">Member since:</span>{' '}
+                        <span className="font-medium">Зарегистрирован с :</span>{' '}
                         {new Date(profile.created_at).toLocaleDateString()}
                       </p>
                     </div>
@@ -270,7 +270,7 @@ export function ProfilePage() {
                 </div>
 
                 <div className="bg-amber-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-semibold text-amber-900 mb-4">Recent Activity</h3>
+                  <h3 className="text-lg font-semibold text-amber-900 mb-4">Последние действия</h3>
                   <div className="space-y-4">
                     {orders.slice(0, 3).map((order) => (
                       <div key={order.id} className="flex items-center space-x-3">
@@ -288,7 +288,7 @@ export function ProfilePage() {
                       </div>
                     ))}
                     {orders.length === 0 && (
-                      <p className="text-gray-500">No recent orders</p>
+                      <p className="text-gray-500">Еще нет предыдущих заказов</p>
                     )}
                   </div>
                 </div>
@@ -298,7 +298,7 @@ export function ProfilePage() {
 
           {activeTab === 'orders' && (
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-amber-900">Order History</h3>
+              <h3 className="text-xl font-semibold text-amber-900">История заказов</h3>
               <div className="space-y-4">
                 {orders.map((order) => (
                   <div key={order.id} className="bg-white border rounded-lg p-4">
@@ -327,7 +327,7 @@ export function ProfilePage() {
                   </div>
                 ))}
                 {orders.length === 0 && (
-                  <p className="text-gray-500">No orders found</p>
+                  <p className="text-gray-500">Заказы не найдены(</p>
                 )}
               </div>
             </div>
@@ -335,40 +335,40 @@ export function ProfilePage() {
 
           {activeTab === 'settings' && (
             <div className="max-w-2xl space-y-6">
-              <h3 className="text-xl font-semibold text-amber-900">Account Settings</h3>
+              <h3 className="text-xl font-semibold text-amber-900">Параметры</h3>
               <div className="space-y-4">
                 <div className="bg-amber-50 p-4 rounded-lg">
-                  <h4 className="font-medium text-amber-900 mb-2">Email Preferences</h4>
+                  <h4 className="font-medium text-amber-900 mb-2">ПОчта</h4>
                   <div className="space-y-2">
                     <label className="flex items-center">
                       <input type="checkbox" className="rounded text-amber-600" />
-                      <span className="ml-2 text-sm text-gray-700">Order confirmations</span>
+                      <span className="ml-2 text-sm text-gray-700">Подтверждение заказа</span>
                     </label>
                     <label className="flex items-center">
                       <input type="checkbox" className="rounded text-amber-600" />
-                      <span className="ml-2 text-sm text-gray-700">Special offers and promotions</span>
+                      <span className="ml-2 text-sm text-gray-700">Специальные предложения и акции</span>
                     </label>
                     <label className="flex items-center">
                       <input type="checkbox" className="rounded text-amber-600" />
-                      <span className="ml-2 text-sm text-gray-700">Newsletter</span>
+                      <span className="ml-2 text-sm text-gray-700">Новостная рассылка</span>
                     </label>
                   </div>
                 </div>
 
                 <div className="bg-amber-50 p-4 rounded-lg">
-                  <h4 className="font-medium text-amber-900 mb-2">Password</h4>
+                  <h4 className="font-medium text-amber-900 mb-2">Пароль</h4>
                   <button className="text-amber-600 hover:text-amber-700 text-sm font-medium">
-                    Change Password
+                    Сменить пароль
                   </button>
                 </div>
 
                 <div className="bg-amber-50 p-4 rounded-lg">
-                  <h4 className="font-medium text-amber-900 mb-2">Delete Account</h4>
+                  <h4 className="font-medium text-amber-900 mb-2">Удалить аккаунт</h4>
                   <p className="text-sm text-gray-600 mb-2">
-                    Once you delete your account, there is no going back. Please be certain.
+                    Как только вы удалите свою учетную запись, пути назад не будет. Пожалуйста, будьте уверены.
                   </p>
                   <button className="text-red-600 hover:text-red-700 text-sm font-medium">
-                    Delete Account
+                    Удалить аккаунт
                   </button>
                 </div>
               </div>

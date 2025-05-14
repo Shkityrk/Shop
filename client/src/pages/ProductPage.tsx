@@ -20,7 +20,7 @@ export function ProductPage() {
         setProduct(response.data.product);
       } catch (err) {
         console.error('Error fetching product:', err);
-        setError('Failed to load product information');
+        setError('Ошибка загрузки продукта. Попробуйте позже.');
       } finally {
         setIsLoading(false);
       }
@@ -40,13 +40,13 @@ export function ProductPage() {
   if (error || !product) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-        <div className="text-red-600">{error || 'Product not found'}</div>
+        <div className="text-red-600">{error || 'Продукт не найден'}</div>
         <button
           onClick={() => navigate('/')}
           className="flex items-center text-amber-600 hover:text-amber-700"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to products
+          Назад ко всем продуктам
         </button>
       </div>
     );
@@ -59,7 +59,7 @@ export function ProductPage() {
         className="flex items-center text-amber-600 hover:text-amber-700 mb-6"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Back to products
+        Назад ко всем продуктам
       </button>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -84,11 +84,11 @@ export function ProductPage() {
           </div>
 
           <div className="text-sm text-gray-500">
-            Weight: {product.weight}g
+            Вес: {product.weight}g
           </div>
 
           <div className="text-sm text-gray-600">
-            <h3 className="font-semibold mb-1">Composition:</h3>
+            <h3 className="font-semibold mb-1">Комозиция:</h3>
             <p>{product.composition}</p>
           </div>
           
@@ -100,7 +100,7 @@ export function ProductPage() {
             className="flex items-center justify-center w-full bg-amber-600 text-white py-3 px-6 rounded-lg hover:bg-amber-700 transition-colors"
           >
             <ShoppingCart className="h-5 w-5 mr-2" />
-            Add to Cart
+            Добавить в корзину
           </button>
         </div>
       </div>
