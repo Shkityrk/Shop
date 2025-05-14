@@ -21,7 +21,20 @@ export const useCartStore = create<CartState>((set) => ({
         return;
       }
       const response = await api.get('/cart');
-      set({ items: response.data || [] });
+      const cartResponse = await api.get('/cart');
+      const cartItems = cartResponse.data || [];
+
+      // Fetch product details for each cart item
+      const productsResponse = await api.get('/product/list');
+      const products = productsResponse.data || [];
+
+      // Combine cart items with product details
+      const cartWithProducts = cartItems.map((cartItem: CartItem) => ({
+        ...cartItem,
+        product: products.find((p: any) => p.id === cartItem.product_id)
+      }));
+
+      set({ items: cartWithProducts });
     } catch (error) {
       console.error('Failed to fetch cart:', error);
       set({ items: [] });
