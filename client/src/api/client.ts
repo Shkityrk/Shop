@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuthStore } from '../store/useAuthStore'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost';
 
@@ -33,22 +34,21 @@ api.interceptors.request.use((config) => {
 
 // Add response interceptor to handle errors
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response) {
+    response => response,
+    error => {
+      const pathname = window.location.pathname;
       if (error.response.status === 401) {
-        // Clear any existing auth state
-        document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        window.location.href = '/login';
+        // 1) Сброс состояния
+        useAuthStore.getState().clearAuth();
+        // 2) Если мы уже не на /login — редиректим
+        if (pathname !== '/login') {
+          // replace чтобы не захламлять историю
+          window.location.replace('/login');
+        }
+
       }
-      console.error('Response error:', error.response.data);
-    } else if (error.request) {
-      console.error('Request error:', error.request);
-    } else {
-      console.error('Error:', error.message);
+      return Promise.reject(error)
     }
-    return Promise.reject(error);
-  }
 );
 
 export const getAuthToken = () => {
