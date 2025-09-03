@@ -40,8 +40,8 @@ export const useAuthStore = create<AuthState>()(
             },
             logout: async () => {
                 await api.post('/auth/logout');
-                document.cookie = 'access_token=; expires=0; path=/;';
-                set({ user: null, isAuthenticated: false });
+                // document.cookie = 'access_token=; expires=0; path=/;';
+                // set({ user: null, isAuthenticated: false });
             },
             // ← вот здесь, внутри функции:
             clearAuth: () => set({ user: null, isAuthenticated: false }),

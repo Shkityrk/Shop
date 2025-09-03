@@ -21,10 +21,7 @@ class AuthService:
             username=user_data.username, email=user_data.email
         )
         if existing_user:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Пользователь с таким именем или email уже существует",
-            )
+            return existing_user
 
         hashed_pw = hash_password(user_data.password)
 

@@ -6,7 +6,7 @@ import { useCartStore } from '../store/useCartStore';
 export function Header() {
   const { isAuthenticated } = useAuthStore();
   const { items } = useCartStore();
-  const itemCount = items.reduce((acc, item) => acc + item.quantity, 0);
+  const itemCount = items.reduce((acc, item) => acc + item.quantity*2, 0);
 
   return (
     <header className="bg-amber-100 shadow-md">

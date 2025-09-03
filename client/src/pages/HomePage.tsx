@@ -41,13 +41,18 @@ export function HomePage() {
   }
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-bold text-amber-900">Наши продукты</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+  <div className="space-y-8">
+    <h1 className="text-3xl font-bold text-amber-900">Наши продукты</h1>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
     </div>
-  );
+    <div className="flex justify-center mt-8">
+      <button className="px-6 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition">
+        Загрузить ещё
+      </button>
+    </div>
+  </div>
+);
 }
