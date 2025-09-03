@@ -39,7 +39,7 @@ export const useAuthStore = create<AuthState>()(
                 set({ user: resp.data.user, isAuthenticated: true });
             },
             logout: async () => {
-                await api.post('/auth/logout');
+                // await api.post('/auth/logout');
                 // document.cookie = 'access_token=; expires=0; path=/;';
                 // set({ user: null, isAuthenticated: false });
             },
