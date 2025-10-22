@@ -1,0 +1,517 @@
+basePath: /
+definitions:
+  models.CartItem:
+    properties:
+      id:
+        example: 1
+        type: integer
+      product_id:
+        example: 1
+        type: integer
+      quantity:
+        example: 2
+        type: integer
+      user_id:
+        example: 1
+        type: integer
+    type: object
+  models.CartItemCreate:
+    properties:
+      product_id:
+        example: 1
+        type: integer
+      quantity:
+        example: 2
+        type: integer
+    required:
+    - product_id
+    - quantity
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        example: Error message
+        type: string
+    type: object
+  models.MessageResponse:
+    properties:
+      message:
+        example: Success
+        type: string
+    type: object
+  models.Product:
+    properties:
+      composition:
+        example: Flour, Sugar, Cocoa, Eggs, Butter
+        type: string
+      full_description:
+        example: A rich and moist chocolate cake with chocolate frosting
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Chocolate Cake
+        type: string
+      photo:
+        example: https://example.com/cake.jpg
+        type: string
+      price:
+        example: 25.99
+        type: number
+      short_description:
+        example: Delicious chocolate cake
+        type: string
+      weight:
+        example: 500
+        type: number
+    type: object
+  models.ProductCreate:
+    properties:
+      composition:
+        example: Flour, Sugar, Cocoa, Eggs, Butter
+        type: string
+      full_description:
+        example: A rich and moist chocolate cake with chocolate frosting
+        type: string
+      name:
+        example: Chocolate Cake
+        type: string
+      photo:
+        example: https://example.com/cake.jpg
+        type: string
+      price:
+        example: 25.99
+        type: number
+      short_description:
+        example: Delicious chocolate cake
+        type: string
+      weight:
+        example: 500
+        type: number
+    required:
+    - composition
+    - full_description
+    - name
+    - photo
+    - price
+    - short_description
+    - weight
+    type: object
+  models.UserCreate:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      last_name:
+        example: Doe
+        type: string
+      password:
+        example: password123
+        type: string
+      username:
+        example: johndoe
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    - username
+    type: object
+  models.UserLogin:
+    properties:
+      password:
+        example: password123
+        type: string
+      username:
+        example: johndoe
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  models.UserOut:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      id:
+        example: 1
+        type: integer
+      last_name:
+        example: Doe
+        type: string
+      username:
+        example: johndoe
+        type: string
+    type: object
+  models.VerifyResponse:
+    properties:
+      exists:
+        example: true
+        type: boolean
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API Gateway for Shop microservices
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Shop Gateway API
+  version: "1.0"
+paths:
+  /auth/info:
+    get:
+      description: Get information about the currently authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserOut'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get current user info
+      tags:
+      - Auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user with username and password
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MessageResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Login user
+      tags:
+      - Auth
+  /auth/logout:
+    post:
+      description: Logout the current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MessageResponse'
+      summary: Logout user
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with username, email, and password
+      parameters:
+      - description: User registration data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserOut'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Register a new user
+      tags:
+      - Auth
+  /cart:
+    get:
+      description: Get all items in the current user's cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CartItem'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get cart items
+      tags:
+      - Cart
+  /cart/add:
+    post:
+      consumes:
+      - application/json
+      description: Add a new item to the current user's cart
+      parameters:
+      - description: Cart item data
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/models.CartItemCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.CartItem'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Add item to cart
+      tags:
+      - Cart
+  /cart/delete/{item_id}:
+    delete:
+      description: Remove an item from the cart
+      parameters:
+      - description: Cart item ID
+        in: path
+        name: item_id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete cart item
+      tags:
+      - Cart
+  /cart/update/{item_id}:
+    put:
+      consumes:
+      - application/json
+      description: Update quantity of an item in the cart
+      parameters:
+      - description: Cart item ID
+        in: path
+        name: item_id
+        required: true
+        type: integer
+      - description: Updated cart item data
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/models.CartItemCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CartItem'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update cart item
+      tags:
+      - Cart
+  /product/add:
+    post:
+      consumes:
+      - application/json
+      description: Create a new product
+      parameters:
+      - description: Product data
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProductCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Add a new product
+      tags:
+      - Product
+  /product/info/{id}:
+    get:
+      description: Get detailed information about a product by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get product info
+      tags:
+      - Product
+  /product/list:
+    get:
+      description: Get a list of all available products
+      parameters:
+      - default: 0
+        description: Number of products to skip
+        in: query
+        name: skip
+        type: integer
+      - default: 100
+        description: Maximum number of products to return
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+      summary: List all products
+      tags:
+      - Product
+  /product/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing product by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated product data
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProductCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a product
+      tags:
+      - Product
+  /product/verify/{name}:
+    get:
+      description: Check if a product with the given name exists
+      parameters:
+      - description: Product name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.VerifyResponse'
+      summary: Verify product exists
+      tags:
+      - Product
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
+
