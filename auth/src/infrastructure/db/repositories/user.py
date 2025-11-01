@@ -26,7 +26,7 @@ class UserRepository(AbstractUserRepository):
         )
         self.db.add(orm_user)
         self.db.commit()
-        return User.from_orm(orm_user)
+        return map_user_orm_to_domain(orm_user)
 
     def get_by_username_or_email(self, username: str, email: str) -> User | None:
         orm_user = (
