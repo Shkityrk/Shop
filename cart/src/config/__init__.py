@@ -10,6 +10,7 @@ from .config import (
     DOCS_URL,
     OPENAPI_URL,
     ORIGIN_URLS,
+    AUTH_SERVICE_URL,
     DATA_SERVICE_URL,
 )
 
@@ -25,5 +26,7 @@ __all__ = [
     "DOCS_URL",
     "OPENAPI_URL",
     "ORIGIN_URLS",
+    "AUTH_SERVICE_URL",
     "DATA_SERVICE_URL",
 ]
+

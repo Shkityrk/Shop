@@ -1,57 +1,78 @@
 package main
 
 import (
-	"gateway/config"
-	"gateway/handlers"
-	"gateway/middleware"
+	"gateway/internal/application/services"
+	"gateway/internal/infrastructure/config"
+	"gateway/internal/infrastructure/http"
+	"gateway/internal/presentation/handlers"
+	"gateway/internal/presentation/middleware"
+	"log"
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"log"
 
 	_ "gateway/docs"
 )
 
 func main() {
 	// Получаем порт из переменной окружения или используем значение по умолчанию
-	port := config.App.Gateway_port
+	port := config.App.GatewayPort
 
 	// Получаем URL'ы сервисов из переменных окружения
-	authServiceURL := config.App.Auth_service_url
-	productServiceURL := config.App.Product_service_url
-	cartServiceURL := config.App.Cart_service_url
+	authServiceURL := config.App.AuthServiceURL
+	productServiceURL := config.App.ProductServiceURL
+	cartServiceURL := config.App.CartServiceURL
 
 	router := gin.Default()
 
 	// Добавляем CORS middleware
 	router.Use(middleware.CORSMiddleware())
 
-	// Создаем handlers
-	authHandler := handlers.NewAuthHandler(authServiceURL)
-	productHandler := handlers.NewProductHandler(productServiceURL)
-	cartHandler := handlers.NewCartHandler(cartServiceURL)
+	// Создаем репозитории
+	authRepo := http.NewAuthRepositoryHTTP(authServiceURL)
+	productRepo := http.NewProductRepositoryHTTP(productServiceURL)
+	cartRepo := http.NewCartRepositoryHTTP(cartServiceURL)
 
-	// Auth routes
+	// Создаем сервисы
+	authService := services.NewAuthService(authRepo)
+	productService := services.NewProductService(productRepo)
+	cartService := services.NewCartService(cartRepo)
+
+	// Создаем handlers
+	authHandler := handlers.NewAuthHandler(authService)
+	productHandler := handlers.NewProductHandler(productService)
+	cartHandler := handlers.NewCartHandler(cartService)
+
+	// Создаем middleware для аутентификации
+	authMiddleware := middleware.AuthMiddleware(authService)
+
+	// Auth routes (некоторые требуют аутентификации)
 	authGroup := router.Group("/auth")
 	{
 		authGroup.POST("/register", authHandler.Register)
 		authGroup.POST("/login", authHandler.Login)
 		authGroup.POST("/logout", authHandler.Logout)
-		authGroup.GET("/info", authHandler.Info)
+		// /auth/info требует аутентификации
+		authGroup.GET("/info", authMiddleware, authHandler.Info)
 	}
 
 	// Product routes
 	productGroup := router.Group("/product")
 	{
+		// Публичные роуты
 		productGroup.GET("/list", productHandler.List)
-		productGroup.POST("/add", productHandler.Add)
-		productGroup.PUT("/update/:id", productHandler.Update)
 		productGroup.GET("/verify/:name", productHandler.Verify)
 		productGroup.GET("/info/:id", productHandler.Info)
+
+		// Защищенные роуты (требуют аутентификации)
+		productGroup.POST("/add", authMiddleware, productHandler.Add)
+		productGroup.PUT("/update/:id", authMiddleware, productHandler.Update)
 	}
 
-	// Cart routes
+	// Cart routes (все требуют аутентификации)
 	cartGroup := router.Group("/cart")
+	cartGroup.Use(authMiddleware)
 	{
 		cartGroup.GET("", cartHandler.Get)
 		cartGroup.POST("/add", cartHandler.Add)

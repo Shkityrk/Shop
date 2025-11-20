@@ -5,8 +5,8 @@ services:
       - environment/.env
     volumes:
       - db_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+#    ports:
+#      - "5432:5432"
     networks:
       - shop_network
 
@@ -14,8 +14,8 @@ services:
     build:
       dockerfile: ./Dockerfile
       context: ./data
-    ports:
-      - "8004:8004"
+#    ports:
+#      - "8004:8004"
     env_file:
       - environment/.env
     environment:
@@ -38,7 +38,7 @@ services:
     env_file:
       - environment/.env
     depends_on:
-      - db
+      - data
     networks:
       - shop_network
 
@@ -56,11 +56,12 @@ services:
 
   cart:
     build: ./cart
-    ports:
-      - "8003:8003"
+#    ports:
+#      - "8003:8003"
     depends_on:
       - db
       - auth
+      - data
     env_file:
       - environment/.env
     networks:

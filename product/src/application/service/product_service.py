@@ -2,8 +2,6 @@ from fastapi import HTTPException
 
 from src.domain.interfaces.product_repository import AbstractProductRepository
 from src.domain.models import Product
-from src.infrastructure.db.models.product import ProductORM
-from src.infrastructure.db.repositories.product import ProductRepository
 from src.schemas.schemas import ProductCreate
 
 
@@ -43,11 +41,27 @@ class ProductService:
                        id: int,
                        product: ProductCreate
                        ):
-        product_exists = self.product_repo.check_if_exists(product.name)
-        if product_exists:
+        existing_product = self.product_repo.get_product_by_id(id)
+        if not existing_product:
+            raise HTTPException(status_code=404, detail="Product not found")
+        
+        # Проверяем, не используется ли это имя другим продуктом
+        product_with_same_name = self.product_repo.get_by_name(product.name)
+        if product_with_same_name and product_with_same_name.id != id:
             raise HTTPException(status_code=400, detail="Product with this name already exists")
-        else:
-            self.product_repo.save(product)
+        
+        # Обновляем продукт
+        updated_product = Product(
+            id=id,
+            name=product.name,
+            short_description=product.short_description,
+            full_description=product.full_description,
+            composition=product.composition,
+            weight=product.weight,
+            price=product.price,
+            photo=product.photo
+        )
+        return self.product_repo.save(updated_product)
 
     def verify_product(self,
                        name: str

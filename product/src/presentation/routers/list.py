@@ -9,5 +9,6 @@ list_router = APIRouter()
 def read_products(skip: int = 0,
                   limit: int = 100,
                   product_service: ProductService = Depends(get_product_service)):
-    products = product_service.read_products()
+    """Получить список продуктов с пагинацией"""
+    products = product_service.read_products(skip=skip, limit=limit)
     return products
