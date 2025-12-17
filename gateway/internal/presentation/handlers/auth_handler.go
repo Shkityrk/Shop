@@ -38,6 +38,9 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
+	// Логирование для отладки
+	println("[GATEWAY REGISTER] username:", userCreate.Username, "user_role:", userCreate.UserRole)
+
 	resp, err := h.service.Register(userCreate, c.Request)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Failed to communicate with auth service"})
@@ -145,3 +148,29 @@ func (h *AuthHandler) Info(c *gin.Context) {
 
 	c.Data(resp.StatusCode, "application/json", body)
 }
+
+// GetStaff godoc
+// @Summary Get list of staff members
+// @Description Get list of all users with role != client (staff, warehouse, courier, admin)
+// @Tags Auth
+// @Produce json
+// @Success 200 {array} models.Staff
+// @Failure 500 {object} models.ErrorResponse
+// @Router /auth/staff [get]
+func (h *AuthHandler) GetStaff(c *gin.Context) {
+	resp, err := h.service.GetStaff()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Failed to communicate with data service"})
+		return
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Failed to read response"})
+		return
+	}
+
+	c.Data(resp.StatusCode, "application/json", body)
+}
+

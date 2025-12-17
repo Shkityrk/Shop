@@ -48,3 +48,8 @@ func (s *AuthService) Info(req *http.Request) (*http.Response, error) {
 	return s.repo.Info(req)
 }
 
+// GetStaff получает список сотрудников
+func (s *AuthService) GetStaff() (*http.Response, error) {
+	return s.repo.GetStaff()
+}
+

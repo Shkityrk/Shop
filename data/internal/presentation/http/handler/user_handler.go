@@ -258,3 +258,22 @@ func (h *UserHandler) CheckUserExists(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.CheckUserExistsResponse{Exists: exists})
 }
 
+// ListStaff получает список всех сотрудников (роль != client)
+// @Summary List staff
+// @Description Get list of all staff members (users with role != client)
+// @Tags users
+// @Produce json
+// @Success 200 {array} dto.StaffResponse
+// @Failure 500 {object} map[string]interface{}
+// @Router /api/users/staff [get]
+func (h *UserHandler) ListStaff(c *gin.Context) {
+	staff, err := h.service.ListStaff(c.Request.Context())
+	if err != nil {
+		h.logger.WithError(err).Error("Failed to list staff")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, staff)
+}
+

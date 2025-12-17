@@ -59,6 +59,7 @@ func (r *Router) Setup() {
 		{
 			users.POST("", r.userHandler.CreateUser)
 			users.GET("", r.userHandler.ListUsers)
+			users.GET("/staff", r.userHandler.ListStaff)
 			users.GET("/:id", r.userHandler.GetUserByID)
 			users.GET("/username/:username", r.userHandler.GetUserByUsername)
 			users.GET("/email/:email", r.userHandler.GetUserByEmail)

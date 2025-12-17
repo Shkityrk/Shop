@@ -22,18 +22,18 @@ func NewUserRepository(db *sql.DB) repository.UserRepository {
 // Create создает нового пользователя
 func (r *userRepositoryImpl) Create(ctx context.Context, user *entity.User) (*entity.User, error) {
 	query := `
-		INSERT INTO users (first_name, last_name, username, email, hashed_password)
-		VALUES ($1, $2, $3, $4, $5)
-		RETURNING id, first_name, last_name, username, email, hashed_password
+		INSERT INTO users (first_name, last_name, username, email, hashed_password, user_role)
+		VALUES ($1, $2, $3, $4, $5, $6)
+		RETURNING id, first_name, last_name, username, email, hashed_password, user_role
 	`
 
 	var created entity.User
 	err := r.db.QueryRowContext(
 		ctx, query,
-		user.FirstName, user.LastName, user.Username, user.Email, user.HashedPassword,
+		user.FirstName, user.LastName, user.Username, user.Email, user.HashedPassword, user.UserRole,
 	).Scan(
 		&created.ID, &created.FirstName, &created.LastName,
-		&created.Username, &created.Email, &created.HashedPassword,
+		&created.Username, &created.Email, &created.HashedPassword, &created.UserRole,
 	)
 
 	if err != nil {
@@ -46,7 +46,7 @@ func (r *userRepositoryImpl) Create(ctx context.Context, user *entity.User) (*en
 // GetByID получает пользователя по ID
 func (r *userRepositoryImpl) GetByID(ctx context.Context, id int) (*entity.User, error) {
 	query := `
-		SELECT id, first_name, last_name, username, email, hashed_password
+		SELECT id, first_name, last_name, username, email, hashed_password, user_role
 		FROM users
 		WHERE id = $1
 	`
@@ -54,7 +54,7 @@ func (r *userRepositoryImpl) GetByID(ctx context.Context, id int) (*entity.User,
 	var user entity.User
 	err := r.db.QueryRowContext(ctx, query, id).Scan(
 		&user.ID, &user.FirstName, &user.LastName,
-		&user.Username, &user.Email, &user.HashedPassword,
+		&user.Username, &user.Email, &user.HashedPassword, &user.UserRole,
 	)
 
 	if err != nil {
@@ -70,7 +70,7 @@ func (r *userRepositoryImpl) GetByID(ctx context.Context, id int) (*entity.User,
 // GetByUsername получает пользователя по username
 func (r *userRepositoryImpl) GetByUsername(ctx context.Context, username string) (*entity.User, error) {
 	query := `
-		SELECT id, first_name, last_name, username, email, hashed_password
+		SELECT id, first_name, last_name, username, email, hashed_password, user_role
 		FROM users
 		WHERE username = $1
 	`
@@ -78,7 +78,7 @@ func (r *userRepositoryImpl) GetByUsername(ctx context.Context, username string)
 	var user entity.User
 	err := r.db.QueryRowContext(ctx, query, username).Scan(
 		&user.ID, &user.FirstName, &user.LastName,
-		&user.Username, &user.Email, &user.HashedPassword,
+		&user.Username, &user.Email, &user.HashedPassword, &user.UserRole,
 	)
 
 	if err != nil {
@@ -94,7 +94,7 @@ func (r *userRepositoryImpl) GetByUsername(ctx context.Context, username string)
 // GetByEmail получает пользователя по email
 func (r *userRepositoryImpl) GetByEmail(ctx context.Context, email string) (*entity.User, error) {
 	query := `
-		SELECT id, first_name, last_name, username, email, hashed_password
+		SELECT id, first_name, last_name, username, email, hashed_password, user_role
 		FROM users
 		WHERE email = $1
 	`
@@ -102,7 +102,7 @@ func (r *userRepositoryImpl) GetByEmail(ctx context.Context, email string) (*ent
 	var user entity.User
 	err := r.db.QueryRowContext(ctx, query, email).Scan(
 		&user.ID, &user.FirstName, &user.LastName,
-		&user.Username, &user.Email, &user.HashedPassword,
+		&user.Username, &user.Email, &user.HashedPassword, &user.UserRole,
 	)
 
 	if err != nil {
@@ -118,7 +118,7 @@ func (r *userRepositoryImpl) GetByEmail(ctx context.Context, email string) (*ent
 // List получает список всех пользователей
 func (r *userRepositoryImpl) List(ctx context.Context, filter *entity.UserFilter) ([]*entity.User, error) {
 	query := `
-		SELECT id, first_name, last_name, username, email, hashed_password
+		SELECT id, first_name, last_name, username, email, hashed_password, user_role
 		FROM users
 	`
 
@@ -159,7 +159,7 @@ func (r *userRepositoryImpl) List(ctx context.Context, filter *entity.UserFilter
 		var user entity.User
 		if err := rows.Scan(
 			&user.ID, &user.FirstName, &user.LastName,
-			&user.Username, &user.Email, &user.HashedPassword,
+			&user.Username, &user.Email, &user.HashedPassword, &user.UserRole,
 		); err != nil {
 			return nil, fmt.Errorf("failed to scan user: %w", err)
 		}
@@ -177,18 +177,18 @@ func (r *userRepositoryImpl) List(ctx context.Context, filter *entity.UserFilter
 func (r *userRepositoryImpl) Update(ctx context.Context, user *entity.User) (*entity.User, error) {
 	query := `
 		UPDATE users
-		SET first_name = $1, last_name = $2, username = $3, email = $4, hashed_password = $5
-		WHERE id = $6
-		RETURNING id, first_name, last_name, username, email, hashed_password
+		SET first_name = $1, last_name = $2, username = $3, email = $4, hashed_password = $5, user_role = $6
+		WHERE id = $7
+		RETURNING id, first_name, last_name, username, email, hashed_password, user_role
 	`
 
 	var updated entity.User
 	err := r.db.QueryRowContext(
 		ctx, query,
-		user.FirstName, user.LastName, user.Username, user.Email, user.HashedPassword, user.ID,
+		user.FirstName, user.LastName, user.Username, user.Email, user.HashedPassword, user.UserRole, user.ID,
 	).Scan(
 		&updated.ID, &updated.FirstName, &updated.LastName,
-		&updated.Username, &updated.Email, &updated.HashedPassword,
+		&updated.Username, &updated.Email, &updated.HashedPassword, &updated.UserRole,
 	)
 
 	if err != nil {
@@ -237,5 +237,38 @@ func (r *userRepositoryImpl) Exists(ctx context.Context, username, email string)
 	}
 
 	return exists, nil
+}
+
+// ListStaff получает список всех сотрудников (роль != client)
+func (r *userRepositoryImpl) ListStaff(ctx context.Context) ([]*entity.User, error) {
+	query := `
+		SELECT id, first_name, last_name, username, email, hashed_password, user_role
+		FROM users
+		WHERE user_role != 'client' AND user_role != ''
+	`
+
+	rows, err := r.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list staff: %w", err)
+	}
+	defer rows.Close()
+
+	var users []*entity.User
+	for rows.Next() {
+		var user entity.User
+		if err := rows.Scan(
+			&user.ID, &user.FirstName, &user.LastName,
+			&user.Username, &user.Email, &user.HashedPassword, &user.UserRole,
+		); err != nil {
+			return nil, fmt.Errorf("failed to scan user: %w", err)
+		}
+		users = append(users, &user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows error: %w", err)
+	}
+
+	return users, nil
 }
 

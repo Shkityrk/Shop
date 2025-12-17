@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/useAuthStore'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost';
+const API_URL = import.meta.env.VITE_API_URL || 'https://localhost';
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -13,7 +13,7 @@ export const api = axios.create({
 });
 
 // Add request interceptor to handle authentication
-api.interceptors.request.use((config) => {
+api.interceptors.request.use((config: any) => {
   const token = document.cookie
     .split('; ')
     .find(row => row.startsWith('access_token='))
@@ -24,11 +24,10 @@ api.interceptors.request.use((config) => {
   }
 
   // Ensure headers are properly set for all requests
-  config.headers = {
-    ...config.headers,
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  };
+  if (!config.headers) config.headers = {};
+  // Use type assertion to avoid AxiosHeaders/Record mismatch
+  (config.headers as Record<string, string>)['Content-Type'] = 'application/json';
+  (config.headers as Record<string, string>)['Accept'] = 'application/json';
   return config;
 });
 
@@ -37,7 +36,8 @@ api.interceptors.response.use(
     response => response,
     error => {
       const pathname = window.location.pathname;
-      if (error.response.status === 401) {
+      // Guard against cases where the network failed and error.response is undefined
+      if (error.response?.status === 401) {
         // 1) Сброс состояния
         useAuthStore.getState().clearAuth();
         // 2) Если мы уже не на /login — редиректим

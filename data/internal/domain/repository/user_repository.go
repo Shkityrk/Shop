@@ -30,5 +30,8 @@ type UserRepository interface {
 	
 	// Exists проверяет существование пользователя по username или email
 	Exists(ctx context.Context, username, email string) (bool, error)
+
+	// ListStaff получает список всех сотрудников (роль != client)
+	ListStaff(ctx context.Context) ([]*entity.User, error)
 }
 

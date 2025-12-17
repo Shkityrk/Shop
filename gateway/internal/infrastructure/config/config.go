@@ -4,10 +4,12 @@ import "os"
 
 // Config holds application configuration
 type Config struct {
-	GatewayPort        string
-	AuthServiceURL     string
-	ProductServiceURL  string
-	CartServiceURL     string
+	GatewayPort         string
+	AuthServiceURL      string
+	ProductServiceURL   string
+	CartServiceURL      string
+	WarehouseServiceURL string
+	ShippingServiceURL  string
 }
 
 // App is the global configuration instance
@@ -15,10 +17,11 @@ var App Config
 
 func init() {
 	App = Config{
-		GatewayPort:        os.Getenv("GATEWAY_PORT"),
-		AuthServiceURL:     os.Getenv("AuthServiceUrl"),
-		ProductServiceURL:  os.Getenv("ProductServiceUrl"),
-		CartServiceURL:     os.Getenv("Cart_service_url"),
+		GatewayPort:         os.Getenv("GATEWAY_PORT"),
+		AuthServiceURL:      os.Getenv("AuthServiceUrl"),
+		ProductServiceURL:   os.Getenv("ProductServiceUrl"),
+		CartServiceURL:      os.Getenv("Cart_service_url"),
+		WarehouseServiceURL: os.Getenv("WarehouseServiceUrl"),
+		ShippingServiceURL:  os.Getenv("ShippingServiceUrl"),
 	}
 }
-

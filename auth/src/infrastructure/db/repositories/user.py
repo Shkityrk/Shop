@@ -15,17 +15,20 @@ class UserRepository(AbstractUserRepository):
             return None
         return map_user_orm_to_domain(orm_user)
 
-    def save(self, user: User) -> None:
+    def save(self, user: User) -> User:
+        print(f"[USER REPO] Saving user with user_role = '{user.user_role}'")
         orm_user = UserORM(
-            id = user.id,
             first_name=user.first_name,
             last_name=user.last_name,
             username=user.username,
             email=user.email,
-            hashed_password=user.hashed_password
+            hashed_password=user.hashed_password,
+            user_role=user.user_role,
         )
         self.db.add(orm_user)
         self.db.commit()
+        self.db.refresh(orm_user)
+        print(f"[USER REPO] After save, orm_user.user_role = '{orm_user.user_role}'")
         return map_user_orm_to_domain(orm_user)
 
     def get_by_username_or_email(self, username: str, email: str) -> User | None:

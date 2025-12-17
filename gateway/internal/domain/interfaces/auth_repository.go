@@ -11,5 +11,6 @@ type AuthRepository interface {
 	Login(body io.Reader, req *http.Request) (*http.Response, error)
 	Logout(req *http.Request) (*http.Response, error)
 	Info(req *http.Request) (*http.Response, error)
+	GetStaff() (*http.Response, error)
 }
 

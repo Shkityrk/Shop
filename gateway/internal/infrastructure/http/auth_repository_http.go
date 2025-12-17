@@ -62,3 +62,13 @@ func (r *AuthRepositoryHTTP) Info(originalReq *http.Request) (*http.Response, er
 	return r.client.Do(req)
 }
 
+// GetStaff получает список сотрудников из data service
+func (r *AuthRepositoryHTTP) GetStaff() (*http.Response, error) {
+	// Обращаемся к data service напрямую (data:8004)
+	req, err := http.NewRequest("GET", "http://data:8004/api/users/staff", nil)
+	if err != nil {
+		return nil, err
+	}
+	return r.client.Do(req)
+}
+

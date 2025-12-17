@@ -1,0 +1,32 @@
+from src.config.env import StrEnv, IntEnv, StrListEnv
+
+__all__ = [
+    "DATABASE_HOST",
+    "DATABASE_PORT",
+    "DATABASE_NAME",
+    "DATABASE_USER",
+    "DATABASE_PASSWORD",
+    "HTTP_HOST",
+    "HTTP_PORT",
+    "PROJECT_NAME",
+    "DOCS_URL",
+    "OPENAPI_URL",
+    "ORIGIN_URLS",
+]
+
+
+DATABASE_HOST: str = StrEnv("POSTGRES_HOST")
+DATABASE_PORT: str = StrEnv("POSTGRES_PORT")
+DATABASE_NAME: str = StrEnv("POSTGRES_NAME")
+DATABASE_USER: str = StrEnv("POSTGRES_USER")
+DATABASE_PASSWORD: str = StrEnv("POSTGRES_PASSWORD")
+
+HTTP_HOST: str = StrEnv("SHIPPING_HTTP_HOST")
+HTTP_PORT: int = IntEnv("SHIPPING_HTTP_PORT")
+
+PROJECT_NAME: str = StrEnv("SHIPPING_PROJECT_NAME")
+DOCS_URL: str = StrEnv("SHIPPING_DOCS_URL")
+OPENAPI_URL: str = StrEnv("SHIPPING_OPENAPI_URL")
+
+ORIGIN_URLS: list = StrListEnv("ORIGIN_URLS")
+

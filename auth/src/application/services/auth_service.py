@@ -28,15 +28,21 @@ class AuthService:
 
         hashed_pw = hash_password(user_data.password)
 
+        # Используем роль из запроса или client по умолчанию
+        user_role = user_data.user_role if user_data.user_role else "client"
+        print(f"[AUTH SERVICE] Creating user with user_role = '{user_role}'")
+
         new_user = User(
             first_name=user_data.first_name,
             last_name=user_data.last_name,
             username=user_data.username,
             email=user_data.email,
             hashed_password=hashed_pw,
+            user_role=user_role,
         )
-        self.user_repo.save(new_user)
-        return new_user
+        saved_user = self.user_repo.save(new_user)
+        return saved_user
+
 
     def authenticate_user(self, user_login: UserLogin) -> Optional[User]:
         user = self.user_repo.get_by_username(user_login.username)

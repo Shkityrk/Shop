@@ -23,6 +23,8 @@ func main() {
 	authServiceURL := config.App.AuthServiceURL
 	productServiceURL := config.App.ProductServiceURL
 	cartServiceURL := config.App.CartServiceURL
+	warehouseServiceURL := config.App.WarehouseServiceURL
+	shippingServiceURL := config.App.ShippingServiceURL
 
 	router := gin.Default()
 
@@ -33,16 +35,22 @@ func main() {
 	authRepo := http.NewAuthRepositoryHTTP(authServiceURL)
 	productRepo := http.NewProductRepositoryHTTP(productServiceURL)
 	cartRepo := http.NewCartRepositoryHTTP(cartServiceURL)
+	wmsRepo := http.NewWmsRepositoryHTTP(warehouseServiceURL)
+	shippingRepo := http.NewShippingRepositoryHTTP(shippingServiceURL)
 
 	// Создаем сервисы
 	authService := services.NewAuthService(authRepo)
 	productService := services.NewProductService(productRepo)
 	cartService := services.NewCartService(cartRepo)
+	wmsService := services.NewWmsService(wmsRepo)
+	shippingService := services.NewShippingService(shippingRepo)
 
 	// Создаем handlers
 	authHandler := handlers.NewAuthHandler(authService)
 	productHandler := handlers.NewProductHandler(productService)
 	cartHandler := handlers.NewCartHandler(cartService)
+	wmsHandler := handlers.NewWmsHandler(wmsService)
+	shippingHandler := handlers.NewShippingHandler(shippingService)
 
 	// Создаем middleware для аутентификации
 	authMiddleware := middleware.AuthMiddleware(authService)
@@ -55,6 +63,8 @@ func main() {
 		authGroup.POST("/logout", authHandler.Logout)
 		// /auth/info требует аутентификации
 		authGroup.GET("/info", authMiddleware, authHandler.Info)
+		// /auth/staff - список сотрудников
+		authGroup.GET("/staff", authHandler.GetStaff)
 	}
 
 	// Product routes
@@ -78,6 +88,59 @@ func main() {
 		cartGroup.POST("/add", cartHandler.Add)
 		cartGroup.PUT("/update/:item_id", cartHandler.Update)
 		cartGroup.DELETE("/delete/:item_id", cartHandler.Delete)
+	}
+
+	// WMS routes (auth required)
+	wmsGroup := router.Group("/wms")
+	wmsGroup.Use(authMiddleware)
+	{
+		wmsGroup.POST("/check", wmsHandler.Check)
+		wmsGroup.POST("/commit", wmsHandler.Commit)
+	}
+
+	// Warehouse routes (auth required)
+	warehouseGroup := router.Group("/warehouse")
+	warehouseGroup.Use(authMiddleware)
+	{
+		// WMS operations
+		warehouseGroup.POST("/wms/check", wmsHandler.Check)
+		warehouseGroup.POST("/wms/commit", wmsHandler.Commit)
+
+		// Warehouse management
+		warehouseGroup.POST("/warehouses", wmsHandler.CreateWarehouse)
+		warehouseGroup.GET("/warehouses", wmsHandler.ListWarehouses)
+		warehouseGroup.GET("/warehouses/:id", wmsHandler.GetWarehouse)
+		warehouseGroup.DELETE("/warehouses/:id", wmsHandler.DeleteWarehouse)
+
+		// Storage rules
+		warehouseGroup.POST("/storage-rules", wmsHandler.CreateStorageRule)
+		warehouseGroup.GET("/storage-rules", wmsHandler.ListStorageRules)
+		warehouseGroup.DELETE("/storage-rules/:id", wmsHandler.DeleteStorageRule)
+
+		// Bin locations
+		warehouseGroup.POST("/locations/bins", wmsHandler.CreateBinLocation)
+		warehouseGroup.GET("/locations/bins", wmsHandler.ListBinLocations)
+		warehouseGroup.DELETE("/locations/bins/:id", wmsHandler.DeleteBinLocation)
+
+		// Inventory
+		warehouseGroup.POST("/inventory/add", wmsHandler.AddInventoryItem)
+		warehouseGroup.POST("/inventory/move", wmsHandler.MoveInventory)
+		warehouseGroup.GET("/inventory/items", wmsHandler.ListInventoryItems)
+		warehouseGroup.GET("/inventory/product/:product_id/total", wmsHandler.GetProductTotalQuantity)
+		warehouseGroup.GET("/inventory/totals", wmsHandler.GetAllProductsTotals)
+	}
+
+	// Shipping routes
+	shippingPublic := router.Group("/shipping")
+	{
+		shippingPublic.GET("/:tracking_code", shippingHandler.Get)
+	}
+	shippingAuth := router.Group("/shipping")
+	shippingAuth.Use(authMiddleware)
+	{
+		shippingAuth.GET("/list", shippingHandler.List)
+		shippingAuth.POST("", shippingHandler.Create)
+		shippingAuth.PATCH("/:tracking_code/status", shippingHandler.UpdateStatus)
 	}
 
 	// Healthcheck

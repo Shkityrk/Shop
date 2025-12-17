@@ -9,4 +9,5 @@ class User:
     username: str
     email: str
     hashed_password: str
+    user_role: str = "client"
     id: Optional[int] = None

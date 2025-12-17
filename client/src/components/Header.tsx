@@ -4,7 +4,7 @@ import { useAuthStore } from '../store/useAuthStore';
 import { useCartStore } from '../store/useCartStore';
 
 export function Header() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const { items } = useCartStore();
   const itemCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -13,11 +13,16 @@ export function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <Croissant className="h-8 w-8 text-amber-600" />
-            <span className="text-2xl font-bold text-amber-900">Магазин выпечки</span>
+            {/*<Croissant className="h-8 w-8 text-amber-600" />*/}
+            <span className="text-2xl font-bold text-amber-900">Магазин</span>
           </Link>
           
           <nav className="flex items-center space-x-6">
+            {user && user.user_role && user.user_role !== 'client' && (
+              <Link to="/admin" className="text-amber-900 hover:text-amber-700 font-medium">
+                Админ-панель
+              </Link>
+            )}
             <Link
               to="/cart"
               className="relative flex items-center text-amber-900 hover:text-amber-700"

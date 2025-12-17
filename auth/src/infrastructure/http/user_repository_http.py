@@ -24,7 +24,8 @@ class UserRepositoryHTTP(AbstractUserRepository):
             "last_name": user.last_name,
             "username": user.username,
             "email": user.email,
-            "hashed_password": user.hashed_password
+            "hashed_password": user.hashed_password,
+            "user_role": user.user_role,
         }
         
         created_user = self.client.create_user(user_data)
@@ -52,6 +53,6 @@ class UserRepositoryHTTP(AbstractUserRepository):
             last_name=user_data.get("last_name"),
             username=user_data.get("username"),
             email=user_data.get("email"),
-            hashed_password=user_data.get("hashed_password")
+            hashed_password=user_data.get("hashed_password"),
+            user_role=user_data.get("user_role") or "client",
         )
-

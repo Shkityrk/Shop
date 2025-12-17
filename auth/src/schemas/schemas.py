@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 __all__ = [
     "UserLogin",
@@ -13,10 +14,16 @@ class UserBase(BaseModel):
     last_name: str
     username: str
     email: EmailStr
+    user_role: str = "client"
 
 
-class UserCreate(UserBase):
+class UserCreate(BaseModel):
+    first_name: str
+    last_name: str
+    username: str
+    email: EmailStr
     password: str
+    user_role: Optional[str] = "client"
 
 
 class UserLogin(BaseModel):

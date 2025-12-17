@@ -6,7 +6,6 @@ import (
 	"data-service/internal/domain/entity"
 	"data-service/internal/domain/repository"
 	"errors"
-	"time"
 )
 
 var (
@@ -41,8 +40,7 @@ func (s *UserService) CreateUser(ctx context.Context, req *dto.CreateUserRequest
 		Username:       req.Username,
 		Email:          req.Email,
 		HashedPassword: req.HashedPassword,
-		CreatedAt:      time.Now(),
-		UpdatedAt:      time.Now(),
+		UserRole:       req.UserRole,
 	}
 
 	createdUser, err := s.repo.Create(ctx, user)
@@ -133,7 +131,9 @@ func (s *UserService) UpdateUser(ctx context.Context, id int, req *dto.UpdateUse
 	if req.HashedPassword != nil {
 		user.HashedPassword = *req.HashedPassword
 	}
-	user.UpdatedAt = time.Now()
+	if req.UserRole != nil {
+		user.UserRole = *req.UserRole
+	}
 
 	updatedUser, err := s.repo.Update(ctx, user)
 	if err != nil {
@@ -153,6 +153,21 @@ func (s *UserService) CheckUserExists(ctx context.Context, username, email strin
 	return s.repo.Exists(ctx, username, email)
 }
 
+// ListStaff получает список всех сотрудников
+func (s *UserService) ListStaff(ctx context.Context) ([]*dto.StaffResponse, error) {
+	users, err := s.repo.ListStaff(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	responses := make([]*dto.StaffResponse, 0, len(users))
+	for _, user := range users {
+		responses = append(responses, s.toStaffResponse(user))
+	}
+
+	return responses, nil
+}
+
 // toUserResponse преобразует entity.User в dto.UserResponse
 func (s *UserService) toUserResponse(user *entity.User) *dto.UserResponse {
 	return &dto.UserResponse{
@@ -162,8 +177,17 @@ func (s *UserService) toUserResponse(user *entity.User) *dto.UserResponse {
 		Username:       user.Username,
 		Email:          user.Email,
 		HashedPassword: user.HashedPassword,
-		CreatedAt:      user.CreatedAt.Format(time.RFC3339),
-		UpdatedAt:      user.UpdatedAt.Format(time.RFC3339),
+		UserRole:       user.UserRole,
+	}
+}
+
+// toStaffResponse преобразует entity.User в dto.StaffResponse
+func (s *UserService) toStaffResponse(user *entity.User) *dto.StaffResponse {
+	return &dto.StaffResponse{
+		ID:        user.ID,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		UserRole:  user.UserRole,
 	}
 }
 

@@ -8,7 +8,7 @@ class AbstractUserRepository(ABC):
         pass
 
     @abstractmethod
-    def save(self, user: User) -> None:
+    def save(self, user: User) -> User:
         pass
 
     @abstractmethod

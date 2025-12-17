@@ -10,13 +10,18 @@ export interface Product {
 }
 
 export interface User {
+  id: number;
   username: string;
   email: string;
   first_name: string;
   last_name: string;
+  user_role?: 'client' | 'staff' | 'warehouse' | 'courier' | 'admin';
 }
 
 export interface CartItem {
-  productId: string;
+  id?: number;
+  user_id?: number;
+  product_id: number;
   quantity: number;
+  product?: Product | null;
 }

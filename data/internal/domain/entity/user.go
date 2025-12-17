@@ -1,17 +1,14 @@
 package entity
 
-import "time"
-
 // User представляет доменную модель пользователя
 type User struct {
-	ID             int       `json:"id"`
-	FirstName      string    `json:"first_name"`
-	LastName       string    `json:"last_name"`
-	Username       string    `json:"username"`
-	Email          string    `json:"email"`
-	HashedPassword string    `json:"hashed_password"`
-	CreatedAt      time.Time `json:"created_at"`
-	UpdatedAt      time.Time `json:"updated_at"`
+	ID             int    `json:"id"`
+	FirstName      string `json:"first_name"`
+	LastName       string `json:"last_name"`
+	Username       string `json:"username"`
+	Email          string `json:"email"`
+	HashedPassword string `json:"hashed_password"`
+	UserRole       string `json:"user_role"`
 }
 
 // UserFilter представляет фильтры для поиска пользователей
@@ -20,4 +17,3 @@ type UserFilter struct {
 	Username *string
 	Email    *string
 }
-

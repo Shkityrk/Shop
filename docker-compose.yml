@@ -49,6 +49,8 @@ services:
     depends_on:
       - db
       - data
+#    ports:
+#      - "8002:8002"
     networks:
       - shop_network
 
@@ -65,6 +67,34 @@ services:
     networks:
       - shop_network
 
+  warehouse:
+    build:
+      context: ./warehouse
+      dockerfile: Dockerfile
+    env_file:
+      - environment/.env
+    depends_on:
+      - db
+      - auth
+      - data
+#    ports:
+#      - "8005:8005"
+    networks:
+      - shop_network
+
+  shipping:
+    build:
+      context: ./shipping
+      dockerfile: Dockerfile
+    env_file:
+      - environment/.env
+    depends_on:
+      - db
+#    ports:
+#      - "8006:8006"
+    networks:
+      - shop_network
+
   gateway:
     build:
       dockerfile: ./Dockerfile
@@ -77,11 +107,15 @@ services:
       - ProductServiceUrl=http://product:8001
       - Cart_service_url=http://cart:8003
       - DATA_SERVICE_URL=http://data:8004
+      - WarehouseServiceUrl=http://warehouse:8005
+      - ShippingServiceUrl=http://shipping:8006
     depends_on:
       - auth
       - product
       - cart
       - data
+      - warehouse
+      - shipping
     networks:
       - shop_network
 

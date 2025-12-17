@@ -7,6 +7,11 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { CartPage } from './pages/CartPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { AdminPage } from './pages/AdminPage';
+import { AdminProductsPage } from './pages/AdminProductsPage';
+import { AdminWarehousesPage } from './pages/AdminWarehousesPage';
+import { AdminShipmentsPage } from './pages/AdminShipmentsPage';
+import { AdminStaffPage } from './pages/AdminStaffPage';
 import { useAuthStore } from './store/useAuthStore';
 import { useCartStore } from './store/useCartStore';
 
@@ -41,7 +46,12 @@ function App() {
               <Route path="/cart" element={<CartPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/admin" element={<AdminPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/admin/products" element={<AdminProductsPage />} />
+              <Route path="/admin/warehouses" element={<AdminWarehousesPage />} />
+              <Route path="/admin/staff" element={<AdminStaffPage />} />
+              <Route path="/admin/shipments" element={<AdminShipmentsPage />} />
             </Routes>
           </main>
         </div>
