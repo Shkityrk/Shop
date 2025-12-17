@@ -2,15 +2,27 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 import { useAuthStore } from '../store/useAuthStore';
-import type { Product } from '../types';
+import type { Product, StorageRule } from '../types';
+
+interface ProductForm {
+  name: string;
+  short_description: string;
+  full_description: string;
+  composition: string;
+  weight: number;
+  price: number;
+  photo: string;
+  storage_rule_id: string;
+}
 
 export function AdminProductsPage() {
   const navigate = useNavigate();
   const { user, fetchUser, isLoading: authLoading } = useAuthStore();
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [storageRules, setStorageRules] = useState<StorageRule[]>([]);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<Omit<Product, 'id'>>({
+  const [form, setForm] = useState<ProductForm>({
     name: '',
     short_description: '',
     full_description: '',
@@ -18,6 +30,7 @@ export function AdminProductsPage() {
     weight: 0,
     price: 0,
     photo: '',
+    storage_rule_id: '',
   });
 
   // Загружаем данные пользователя при монтировании
@@ -37,8 +50,18 @@ export function AdminProductsPage() {
     }
   };
 
+  const loadStorageRules = async () => {
+    try {
+      const resp = await api.get('/warehouse/storage-rules');
+      setStorageRules(resp.data || []);
+    } catch (e) {
+      console.error('Failed to load storage rules:', e);
+    }
+  };
+
   useEffect(() => {
     load();
+    loadStorageRules();
   }, []);
 
   // Показываем загрузку пока получаем данные пользователя
@@ -65,7 +88,7 @@ export function AdminProductsPage() {
     );
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -75,7 +98,11 @@ export function AdminProductsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await api.post('/product/add', form);
+    const payload = {
+      ...form,
+      storage_rule_id: form.storage_rule_id ? Number(form.storage_rule_id) : null,
+    };
+    await api.post('/product/add', payload);
     setForm({
       name: '',
       short_description: '',
@@ -84,6 +111,7 @@ export function AdminProductsPage() {
       weight: 0,
       price: 0,
       photo: '',
+      storage_rule_id: '',
     });
     await load();
   };
@@ -147,6 +175,24 @@ export function AdminProductsPage() {
           placeholder="Состав"
           className="border p-2 rounded md:col-span-2"
         />
+        <select
+          name="storage_rule_id"
+          value={form.storage_rule_id}
+          onChange={handleChange}
+          className="border p-2 rounded md:col-span-2"
+        >
+          <option value="">Без условий хранения</option>
+          {storageRules.map((rule) => (
+            <option key={rule.id} value={rule.id}>
+              {rule.name}
+              {rule.temp_min !== null || rule.temp_max !== null
+                ? ` (${rule.temp_min ?? '—'}°C — ${rule.temp_max ?? '—'}°C)`
+                : ''}
+              {rule.is_hazardous ? ' ⚠️' : ''}
+              {rule.is_oversized ? ' 📦' : ''}
+            </option>
+          ))}
+        </select>
         <button
           type="submit"
           className="bg-amber-600 text-white py-2 px-4 rounded hover:bg-amber-700 md:col-span-2"
@@ -167,6 +213,7 @@ export function AdminProductsPage() {
               <th className="text-left p-2">Название</th>
               <th className="text-left p-2">Цена</th>
               <th className="text-left p-2">Вес</th>
+              <th className="text-left p-2">Условия хранения</th>
             </tr>
             </thead>
             <tbody>
@@ -176,6 +223,12 @@ export function AdminProductsPage() {
                 <td className="p-2">{p.name}</td>
                 <td className="p-2">{p.price}</td>
                 <td className="p-2">{p.weight}</td>
+                <td className="p-2">
+                  {p.storage_rule_id
+                    ? storageRules.find(r => r.id === p.storage_rule_id)?.name || `#${p.storage_rule_id}`
+                    : <span className="text-gray-400">—</span>
+                  }
+                </td>
               </tr>
             ))}
             </tbody>

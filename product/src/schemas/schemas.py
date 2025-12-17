@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class ProductCreate(BaseModel):
@@ -9,3 +10,4 @@ class ProductCreate(BaseModel):
     weight: float
     price: float
     photo: str
+    storage_rule_id: Optional[int] = None

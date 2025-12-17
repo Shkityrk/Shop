@@ -7,6 +7,17 @@ export interface Product {
   weight: number;
   composition: string;
   photo: string;
+  storage_rule_id?: number | null;
+}
+
+export interface StorageRule {
+  id: number;
+  name: string;
+  description?: string | null;
+  is_hazardous: boolean;
+  is_oversized: boolean;
+  temp_min?: number | null;
+  temp_max?: number | null;
 }
 
 export interface User {

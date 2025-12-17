@@ -83,6 +83,7 @@ class ProductRepository(AbstractProductRepository):
             db_item.weight = product.weight
             db_item.price = product.price
             db_item.photo = product.photo
+            db_item.storage_rule_id = product.storage_rule_id
             self.db.commit()
             self.db.refresh(db_item)
             return self._to_domain(db_item)
@@ -102,6 +103,7 @@ class ProductRepository(AbstractProductRepository):
             weight=db_item.weight,
             price=float(db_item.price),
             photo=db_item.photo,
+            storage_rule_id=db_item.storage_rule_id,
         )
 
     def _to_entity(self, product: Product) -> ProductORM:
@@ -116,4 +118,5 @@ class ProductRepository(AbstractProductRepository):
             weight=product.weight,
             price=product.price,
             photo=product.photo,
+            storage_rule_id=product.storage_rule_id,
         )

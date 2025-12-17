@@ -32,7 +32,8 @@ class ProductService:
                 composition=product.composition,
                 weight=product.weight,
                 price=product.price,
-                photo=product.photo
+                photo=product.photo,
+                storage_rule_id=product.storage_rule_id
             )
 
             return self.product_repo.add_product(new_product)
@@ -59,7 +60,8 @@ class ProductService:
             composition=product.composition,
             weight=product.weight,
             price=product.price,
-            photo=product.photo
+            photo=product.photo,
+            storage_rule_id=product.storage_rule_id
         )
         return self.product_repo.save(updated_product)
 

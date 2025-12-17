@@ -14,6 +14,7 @@ class Product:
     price: float
     photo: str
     id: Optional[int] = None
+    storage_rule_id: Optional[int] = None
 
     @classmethod
     def from_orm(cls, orm_prod: ProductORM) -> "Product":
@@ -26,4 +27,5 @@ class Product:
             weight = orm_prod.weight,
             price = orm_prod.price,
             photo = orm_prod.photo,
+            storage_rule_id = orm_prod.storage_rule_id,
         )

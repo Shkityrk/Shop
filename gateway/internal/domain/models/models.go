@@ -43,6 +43,7 @@ type ProductCreate struct {
 	Weight           float64 `json:"weight" binding:"required" example:"500"`
 	Price            float64 `json:"price" binding:"required" example:"25.99"`
 	Photo            string  `json:"photo" binding:"required" example:"https://example.com/cake.jpg"`
+	StorageRuleID    *int    `json:"storage_rule_id,omitempty" example:"1"`
 }
 
 // Product represents a product response
@@ -55,6 +56,7 @@ type Product struct {
 	Weight           float64 `json:"weight" example:"500"`
 	Price            float64 `json:"price" example:"25.99"`
 	Photo            string  `json:"photo" example:"https://example.com/cake.jpg"`
+	StorageRuleID    *int    `json:"storage_rule_id,omitempty" example:"1"`
 }
 
 // CartItemCreate represents a cart item creation request

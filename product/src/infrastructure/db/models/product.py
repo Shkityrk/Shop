@@ -22,6 +22,7 @@ class ProductORM(Base):
     weight = Column(Float)
     price = Column(DECIMAL(10, 2))
     photo = Column(String)
+    storage_rule_id = Column(Integer, nullable=True)
 
     def __repr__(self):
         return f"<Product(name={self.name})>"
