@@ -58,3 +58,29 @@ func (p *PostgresDB) GetDB() *sql.DB {
 	return p.DB
 }
 
+// InitCartItemsTable создает таблицу cart_items, если она не существует
+func (p *PostgresDB) InitCartItemsTable() error {
+	query := `
+		CREATE TABLE IF NOT EXISTS cart_items (
+			id SERIAL PRIMARY KEY,
+			user_id INTEGER NOT NULL,
+			product_id INTEGER NOT NULL,
+			quantity INTEGER NOT NULL DEFAULT 1,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		);
+		
+		CREATE INDEX IF NOT EXISTS idx_cart_items_user_id ON cart_items(user_id);
+		CREATE INDEX IF NOT EXISTS idx_cart_items_product_id ON cart_items(product_id);
+		CREATE INDEX IF NOT EXISTS idx_cart_items_user_product ON cart_items(user_id, product_id);
+	`
+
+	_, err := p.DB.Exec(query)
+	if err != nil {
+		return fmt.Errorf("failed to create cart_items table: %w", err)
+	}
+
+	logrus.Info("Cart items table initialized successfully")
+	return nil
+}
+

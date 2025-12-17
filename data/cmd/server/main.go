@@ -73,6 +73,11 @@ func main() {
 		}
 	}()
 
+	// Инициализация таблицы cart_items
+	if err := db.InitCartItemsTable(); err != nil {
+		logger.WithError(err).Fatal("Failed to initialize cart_items table")
+	}
+
 	userRepo = infrarepo.NewUserRepository(db.GetDB())
 	productRepo = infrarepo.NewProductRepository(db.GetDB())
 	cartRepo = infrarepo.NewCartRepository(db.GetDB())

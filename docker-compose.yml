@@ -23,8 +23,6 @@ services:
       - DATA_SERVICE_HOST=0.0.0.0
       - DB_HOST=db
       - DB_TYPE=${DB_TYPE:-postgres}
-      - MONGO_URI=${MONGO_URI:-mongodb://mongo:27017}
-      - MONGO_DB=${MONGO_DB:-shop}
     depends_on:
       - db
     networks:
